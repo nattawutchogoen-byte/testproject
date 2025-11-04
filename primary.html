@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>ประถม</title>
+  </head>
+<body>
+  <h1>ยินดีต้อนรับสู่ระดับประถม 📚</h1>
+  <p>คลิกปุ่มด้านล่างเพื่อกลับสู่หน้าแรก</p>
+  <a href="index.html">⬅ กลับหน้าแรก</a>
+  <h1>รายวิชาประถม 📚</h1>
+  <div class="subject-menu">
+    <button class="subject-btn">ภาษาไทย</button>
+    <button class="subject-btn">คณิตศาสตร์</button>
+    <button class="subject-btn">วิทยาศาสตร์</button>
+    <button class="subject-btn">สังคมศึกษา</button>
+    <button class="subject-btn">อังกฤษ</button>
+    <button class="subject-btn">ศิลปะ</button>
+  </div>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@400;600&display=swap');
+
+    body {
+      background: linear-gradient(135deg, #C9FFBF, #FFAFBD);
+      font-family: 'Prompt', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      color: #333;
+    }
+
+    h1 {
+      font-size: 40px;
+      margin-bottom: 40px;
+      color: #2c1462;
+    }
+
+    .subject-menu {
+      display: grid;
+      grid-template-columns: repeat(3, 200px);
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .subject-btn {
+      background: linear-gradient(135deg, #FFD700, #FFA500);
+      color: #2c1462;
+      font-size: 22px;
+      border-radius: 14px;
+      padding: 15px;
+      text-decoration: none;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+      transition: all 0.3s ease;
+    }
+
+    .subject-btn:hover {
+      transform: translateY(-3px);
+      background: linear-gradient(135deg, #FFC300, #FF8C00);
+      color: white;
+    }
+
+    a.back {
+      margin-top: 40px;
+      font-size: 18px;
+      color: #007bff;
+      text-decoration: none;
+    }
+  </style>
+</body>
+</html>
