@@ -2,6 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>IQ2GO เรียนรู้สำหรับเด็กประถมกับอนุบาล</title>
 </head>
 <body>
@@ -10,13 +11,7 @@
     <a href="primary.html" class="btn">ประถม</a>
   </div>
   <style>
-    @media (max-width: 600px) {
-  .back-b {
-    font-size: 1.2rem;
-    padding: 0.9rem 2rem;
-    border-radius: 40px;
-  }
-}
+
      @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@400;600&display=swap');
      body {
       margin: 0;
@@ -109,6 +104,17 @@
       text-shadow: 1px 1px 5px rgba(0,0,0,0.3);
       margin-top: 6px;
     }
+
+        @media (max-width: 600px) {
+  .back-b {
+    font-size: 1.2rem;
+    padding: 0.9rem 2rem;
+    border-radius: 40px;
+    font-size: clamp(18px, 4vw, 32px);
+  }
+}
+
+
   </style>
   <div class="music-widget">
     <button class="music-btn" id="musicBtn" onclick="toggleMusic()">🎵</button>
