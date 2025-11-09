@@ -58,6 +58,7 @@
       outline: none;
       transition: all 0.2s;
       background-color: #fff9e6;
+      box-sizing: border-box;
     }
 
     input:focus, select:focus {
@@ -87,10 +88,24 @@
       transform: translateY(0);
     }
 
+    button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+
     .success {
       display: none;
       font-size: 1.2rem;
       color: #4CAF50;
+      margin-top: 15px;
+      animation: bounce 1s ease;
+    }
+
+    .error {
+      display: none;
+      font-size: 1rem;
+      color: #FF6B6B;
       margin-top: 15px;
       animation: bounce 1s ease;
     }
@@ -148,13 +163,17 @@
       <option value="">-- เลือกชั้นเรียน --</option>
     </select>
 
-    <button onclick="register()">สมัครเลย!</button>
+    <button id="registerBtn" onclick="register()">สมัครเลย!</button>
     <p class="success" id="successMsg">🎉 สมัครสำเร็จ</p>
+    <p class="error" id="errorMsg" style="display: none;"></p>
   </div>
 
   <audio id="successSound" src="https://cdn.pixabay.com/download/audio/2023/03/21/audio_cbf29a319e.mp3?filename=correct-answer-3-126467.mp3"></audio>
 
   <script>
+  // ⚠️ แทนที่ URL นี้ด้วย URL ของ Google Apps Script ของคุณ
+  const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwKa4OhKfgmrr_UUciDQuKhWcgTsEYozXp0j4BJNF1xsQI7NvTStuNMhY5rjLqRg8dYPw/exec";
+
   function updateGradeOptions() {
     const level = document.getElementById("level").value;
     const grade = document.getElementById("grade");
@@ -177,46 +196,104 @@
     }
   }
 
-  function register() {
+  /**
+   * ฟังก์ชันสำหรับส่งข้อมูลไปยัง Google Sheet
+   */
+  async function sendToGoogleSheet(data) {
+    try {
+      const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      const result = await response.json();
+      return result;
+    } catch (error) {
+      console.error('เกิดข้อผิดพลาดในการส่งข้อมูล:', error);
+      return {
+        status: "error",
+        message: "ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้"
+      };
+    }
+  }
+
+  /**
+   * ฟังก์ชันหลักสำหรับการสมัคร
+   */
+  async function register() {
     const name = document.getElementById("name").value.trim();
     const level = document.getElementById("level").value;
     const grade = document.getElementById("grade").value;
     const successMsg = document.getElementById("successMsg");
+    const errorMsg = document.getElementById("errorMsg");
+    const registerBtn = document.getElementById("registerBtn");
     const sound = document.getElementById("successSound");
 
+    // ซ่อนข้อความเก่า
+    successMsg.style.display = "none";
+    errorMsg.style.display = "none";
+
+    // ตรวจสอบข้อมูล
     if (!name || !level || !grade) {
-      alert("กรุณากรอกข้อมูลให้ครบถ้วนก่อนสมัคร");
+      errorMsg.textContent = "❌ กรุณากรอกข้อมูลให้ครบถ้วนก่อนสมัคร";
+      errorMsg.style.display = "block";
       return;
     }
 
-    // 🧠 เก็บข้อมูลผู้สมัครไว้ใน localStorage
-    const logs = JSON.parse(localStorage.getItem("userLogs") || "[]");
-    logs.push({
-      name,
+    // ปิดปุ่มเพื่อป้องกันการคลิกซ้ำ
+    registerBtn.disabled = true;
+    registerBtn.textContent = "กำลังสมัคร...";
+
+    // เตรียมข้อมูลที่จะส่ง
+    const registrationData = {
+      name: name,
       level: grade,
-      date: new Date().toLocaleString("th-TH")
-    });
-    localStorage.setItem("userLogs", JSON.stringify(logs));
+      date: new Date().toLocaleString("th-TH"),
+      ipAddress: "ติดตามจากอุปกรณ์" // สามารถเพิ่มการติดตาม IP ได้ในภายหลัง
+    };
 
-    successMsg.style.display = "block";
-    sound.play();
+    // ส่งข้อมูลไปยัง Google Sheet
+    const result = await sendToGoogleSheet(registrationData);
 
-    setTimeout(() => {
-      const fileMap = {
-        "ป.1": "p1.html",
-        "ป.2": "p2.html",
-        "ป.3": "p3.html",
-        "ป.4": "p4.html",
-        "ป.5": "p5.html",
-        "ป.6": "p6.html",
-        "อนุบาล 1": "kid1-3.html",
-        "อนุบาล 2": "kid1-3.html",
-        "อนุบาล 3": "kid1-3.html"
-      };
-      window.location.href = fileMap[grade] || "index.html";
-    }, 1500);
+    if (result.status === "success") {
+      // บันทึกข้อมูลใน localStorage ด้วย (สำรองข้อมูลท้องถิ่น)
+      const logs = JSON.parse(localStorage.getItem("userLogs") || "[]");
+      logs.push(registrationData);
+      localStorage.setItem("userLogs", JSON.stringify(logs));
+
+      // แสดงข้อความสำเร็จ
+      successMsg.style.display = "block";
+      sound.play();
+
+      // นำไปยังหน้าถัดไป
+      setTimeout(() => {
+        const fileMap = {
+          "ป.1": "p1.html",
+          "ป.2": "p2.html",
+          "ป.3": "p3.html",
+          "ป.4": "p4.html",
+          "ป.5": "p5.html",
+          "ป.6": "p6.html",
+          "อนุบาล 1": "kid1-3.html",
+          "อนุบาล 2": "kid1-3.html",
+          "อนุบาล 3": "kid1-3.html"
+        };
+        window.location.href = fileMap[grade] || "index.html";
+      }, 1500);
+    } else {
+      // แสดงข้อความข้อผิดพลาด
+      errorMsg.textContent = "❌ " + (result.message || "เกิดข้อผิดพลาดในการสมัคร");
+      errorMsg.style.display = "block";
+
+      // เปิดปุ่มใหม่
+      registerBtn.disabled = false;
+      registerBtn.textContent = "สมัครเลย!";
+    }
   }
-</script>
+  </script>
 
   <button class="teacher-login-btn" onclick="window.location.href='teacher-login.html'">
     👩‍🏫 เข้าสู่ระบบครู
