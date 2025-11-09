@@ -1,0 +1,210 @@
+
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>แบบฝึกหัดเทคโนโลยี อนุบาล</title>
+  <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Itim', cursive;
+      background: linear-gradient(135deg, #F0F8FF, #E6E6FA); /* Light, neutral background */
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+
+    .header {
+      /* Kindergarten color scheme */
+      background: linear-gradient(135deg, #FF69B4, #FF1493);
+      color: white;
+      padding: 20px;
+      border-radius: 15px;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .header h1 {
+      font-size: 2rem;
+      margin-bottom: 5px;
+    }
+
+    .header p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    .quiz-section {
+      margin-bottom: 20px;
+    }
+
+    .question-card {
+      background: #FFF0F5; /* Light pink for kindergarten theme */
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      border-left: 5px solid #FF1493;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .question-card h4 {
+      color: #FF1493;
+      margin-bottom: 10px;
+      font-size: 1.2rem;
+    }
+
+    .options label {
+      display: block;
+      margin-bottom: 8px;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 5px;
+      transition: background-color 0.2s;
+    }
+
+    .options label:hover {
+      background-color: #FFE5B4;
+    }
+
+    .submit-btn {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      background-color: #FF69B4;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin-top: 30px;
+    }
+
+    .submit-btn:hover {
+      background-color: #FF1493;
+    }
+
+    .result {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #FF1493;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>แบบฝึกหัดเทคโนโลยี</h1>
+      <p>ชั้นอนุบาล - จำนวน 10 ข้อ</p>
+    </div>
+
+    <form id="quizForm">
+      <!-- Questions will be rendered here by JavaScript -->
+      <button type="submit" class="submit-btn">ส่งคำตอบ</button>
+    </form>
+
+    <div id="quizResult" class="result" style="display: none;"></div>
+  </div>
+
+  <script>
+    const QUIZ_DATA = [
+        {"q": "อุปกรณ์ใดที่ใช้ดูการ์ตูนและเล่นเกม?", "options": ["ช้อน", "คอมพิวเตอร์", "รองเท้า", "แปรงสีฟัน"], "answer": "คอมพิวเตอร์"},
+        {"q": "เราใช้โทรศัพท์มือถือทำอะไร?", "options": ["นอน", "พูดคุย", "กินข้าว", "วิ่ง"], "answer": "พูดคุย"},
+        {"q": "การเปิดคอมพิวเตอร์ต้องกดปุ่มอะไร?", "options": ["ปุ่มปิด", "ปุ่มเปิด", "ปุ่มเพิ่มเสียง", "ปุ่มลดเสียง"], "answer": "ปุ่มเปิด"},
+        {"q": "เราใช้เมาส์ทำอะไรบนหน้าจอ?", "options": ["พิมพ์", "คลิก", "วาด", "ร้องเพลง"], "answer": "คลิก"},
+        {"q": "แท็บเล็ตคืออะไร?", "options": ["หนังสือ", "ของเล่น", "คอมพิวเตอร์พกพา", "อาหาร"], "answer": "คอมพิวเตอร์พกพา"},
+        {"q": "เราควรขออนุญาตใครก่อนใช้คอมพิวเตอร์?", "options": ["เพื่อน", "คุณครู/ผู้ปกครอง", "ตุ๊กตา", "แมว"], "answer": "คุณครู/ผู้ปกครอง"},
+        {"q": "เราใช้คีย์บอร์ดทำอะไร?", "options": ["วาดรูป", "พิมพ์ตัวอักษร", "ฟังเพลง", "ดูหนัง"], "answer": "พิมพ์ตัวอักษร"},
+        {"q": "เมื่อใช้คอมพิวเตอร์เสร็จแล้วควรทำอย่างไร?", "options": ["ทิ้งไว้", "ปิดเครื่อง", "เปิดทิ้งไว้", "เอาไปซ่อน"], "answer": "ปิดเครื่อง"},
+        {"q": "การดูวิดีโอต้องใช้อุปกรณ์ใด?", "options": ["หม้อ", "ทีวี/จอภาพ", "ช้อน", "หวี"], "answer": "ทีวี/จอภาพ"},
+        {"q": "เราสามารถค้นหาข้อมูลได้จากที่ใด?", "options": ["ในป่า", "ในตู้เย็น", "ในอินเทอร์เน็ต", "ใต้เตียง"], "answer": "ในอินเทอร์เน็ต"}
+    ];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const quizForm = document.getElementById('quizForm');
+      const quizResult = document.getElementById('quizResult');
+      const submitBtn = quizForm.querySelector('.submit-btn');
+      const questionsContainer = document.createElement('div');
+      quizForm.insertBefore(questionsContainer, submitBtn);
+
+      // Function to render the quiz questions
+      function renderQuiz() {
+        let html = '';
+        QUIZ_DATA.forEach((qData, index) => {
+          const qNum = index + 1;
+          html += `
+            <div class="question-card">
+              <h4>ข้อ ${qNum}: ${qData.q}</h4>
+              <div class="options">
+          `;
+          qData.options.forEach((option, optIndex) => {
+            const optionId = `q${qNum}_${optIndex}`;
+            html += `
+                <label for="${optionId}"><input type="radio" name="q${qNum}" id="${optionId}" value="${option}"> ${option}</label>
+            `;
+          });
+          html += `
+              </div>
+            </div>
+          `;
+        });
+        
+        questionsContainer.innerHTML = html;
+      }
+
+      // Function to check answers
+      function checkAnswers(e) {
+        e.preventDefault();
+        
+        let score = 0;
+        let totalQuestions = QUIZ_DATA.length;
+
+        QUIZ_DATA.forEach((qData, index) => {
+          const qNum = index + 1;
+          const selectedOption = quizForm.querySelector(`input[name="q${qNum}"]:checked`);
+          
+          const questionCard = questionsContainer.querySelector(`.question-card:nth-child(${qNum})`).style;
+          questionCard.borderLeft = '5px solid #FF1493'; // Reset color
+
+          if (selectedOption) {
+            if (selectedOption.value === qData.answer) {
+              score++;
+              questionCard.borderLeft = '5px solid green'; // Correct
+            } else {
+              questionCard.borderLeft = '5px solid red'; // Incorrect
+            }
+          }
+        });
+
+        quizResult.textContent = `ผลลัพธ์: คุณทำได้ ${score}/${totalQuestions} คะแนน`;
+        quizResult.style.display = 'block';
+        
+        // Disable form after submission
+        submitBtn.disabled = true;
+        quizForm.querySelectorAll('input').forEach(input => input.disabled = true);
+      }
+
+      // Initial render and event listener setup
+      renderQuiz();
+      quizForm.addEventListener('submit', checkAnswers);
+    });
+  </script>
+</body>
+</html>

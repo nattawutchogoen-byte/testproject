@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>หน้าอนุบาล 1-3</title>
+  <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Itim', cursive;
+      background: linear-gradient(135deg, #FFE5B4, #FFDAB9, #FFB6C1);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #FF69B4, #FF1493);
+      color: white;
+      padding: 40px 30px;
+      border-radius: 20px;
+      text-align: center;
+      margin-bottom: 30px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      font-size: 1.2rem;
+      opacity: 0.95;
+    }
+
+    .welcome-section {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .welcome-section h2 {
+      color: #FF1493;
+      font-size: 2rem;
+      margin-bottom: 15px;
+    }
+
+    .welcome-section p {
+      color: #666;
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+
+    .student-info {
+      background: linear-gradient(135deg, #FFE5B4, #FFDAB9);
+      padding: 20px;
+      border-radius: 15px;
+      margin: 20px 0;
+      border-left: 5px solid #FF1493;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,105,180,0.3);
+    }
+
+    .info-row:last-child {
+      border-bottom: none;
+    }
+
+    .info-label {
+      font-weight: bold;
+      color: #333;
+    }
+
+    .info-value {
+      color: #FF1493;
+      font-weight: bold;
+    }
+
+    .activities-section {
+      margin-top: 30px;
+    }
+
+    .activities-section h3 {
+      color: #FF1493;
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .activities-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .activity-card {
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      text-align: center;
+      transition: transform 0.3s, box-shadow 0.3s;
+      border-top: 5px solid #FF69B4;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+    }
+
+    .activity-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+      text-decoration: none;
+    }
+
+    .activity-icon {
+      font-size: 3rem;
+      margin-bottom: 15px;
+    }
+
+    .activity-card h4 {
+      color: #FF1493;
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+    }
+
+    .activity-card p {
+      color: #666;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .button-group {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 12px 30px;
+      border: none;
+      border-radius: 25px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+      font-family: 'Itim', cursive;
+      font-weight: bold;
+      min-width: 150px;
+    }
+
+    .btn-home {
+      background-color: #FF1493;
+      color: white;
+    }
+
+    .btn-home:hover {
+      background-color: #FF69B4;
+      transform: translateY(-3px);
+      box-shadow: 0 4px 8px rgba(255,20,147,0.3);
+    }
+
+    .btn-register {
+      background-color: #FFB6C1;
+      color: #333;
+    }
+
+    .btn-register:hover {
+      background-color: #FF69B4;
+      color: white;
+      transform: translateY(-3px);
+      box-shadow: 0 4px 8px rgba(255,105,180,0.3);
+    }
+
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 1.8rem;
+      }
+
+      .activities-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .button-group {
+        flex-direction: column;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🎈 ยินดีต้อนรับสู่ชั้นอนุบาล 1-3</h1>
+      <p>โรงเรียนของเรา - สถานที่ที่เต็มไปด้วยความสุขและการเรียนรู้</p>
+    </div>
+
+    <div class="welcome-section">
+      <h2>🌟 ยินดีต้อนรับเพื่อนใหม่!</h2>
+      <p>
+        เราดีใจที่ได้ต้อนรับคุณเข้ามาเป็นส่วนหนึ่งของครอบครัวของเรา
+        ที่นี่เราจะเรียนรู้ เล่น และเติบโตไปด้วยกัน
+      </p>
+
+      <div class="student-info">
+        <div class="info-row">
+          <span class="info-label">👤 ชื่อนักเรียน:</span>
+          <span class="info-value" id="studentName">-</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">🎓 ชั้นเรียน:</span>
+          <span class="info-value" id="studentGrade">-</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">📅 วันที่เข้าเรียน:</span>
+          <span class="info-value" id="studentDate">-</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="activities-section">
+      <h3>📚 รายวิชาของอนุบาล</h3>
+      <div class="activities-grid">
+        <a href="thaikid.html" class="activity-card">
+          <div class="activity-icon">🇹🇭</div>
+          <h4>ภาษาไทย</h4>
+          <p>เรียนรู้การอ่าน การเขียน แล้วการพูดภาษาไทย</p>
+        </a>
+
+        <a href="mathkid.html" class="activity-card">
+          <div class="activity-icon">🔢</div>
+          <h4>คณิตศาสตร์</h4>
+          <p>เรียนตัวเลข การนับ แล้วแนวคิดคณิตศาสตร์พื้นฐาน</p>
+        </a>
+
+        <a href="artkid.html" class="activity-card">
+          <div class="activity-icon">🎨</div>
+          <h4>ศิลปะ</h4>
+          <p>วาดภาพ ปั้น แล้วสร้างสรรค์ผลงานศิลปะต่างๆ</p>
+        </a>
+
+        <a href="music_kid.html" class="activity-card">
+          <div class="activity-icon">🎵</div>
+          <h4>ดนตรี</h4>
+          <p>ร้องเพลง เรียนจังหวะ แล้วเล่นเครื่องดนตรีง่ายๆ</p>
+        </a>
+
+        <a href="pe_kid.html" class="activity-card">
+          <div class="activity-icon">🏃</div>
+          <h4>พลศึกษา</h4>
+          <p>เล่นกีฬา อออกกำลังกาย แล้วกิจกรรมกลุ่ม</p>
+        </a>
+
+        <a href="social_kid.html" class="activity-card">
+          <div class="activity-icon">🌍</div>
+          <h4>สังคมศึกษา</h4>
+          <p>เรียนรู้เกี่ยวกับครอบครัว ชุมชน เมือง แล้วสังคม</p>
+        </a>
+
+        <a href="science_kid.html" class="activity-card">
+          <div class="activity-icon">🔬</div>
+          <h4>วิทยาศาสตร์</h4>
+          <p>สำรวจธรรมชาติ สัตว์ พืช แล้วสิ่งแวดล้อม</p>
+        </a>
+
+        <a href="tech_kid.html" class="activity-card">
+          <div class="activity-icon">💻</div>
+          <h4>เทคโนโลยี</h4>
+          <p>เรียนรู้พื้นฐานการใช้คอมพิวเตอร์แล้วแท็บเล็ต</p>
+        </a>
+
+        <a href="reading_kid.html" class="activity-card">
+          <div class="activity-icon">📖</div>
+          <h4>การอ่าน</h4>
+          <p>ฟังเรื่องราว อ่านหนังสือ แล้วเรียนรู้คำศัพท์ใหม่</p>
+        </a>
+
+        <a href="creative_kid.html" class="activity-card">
+          <div class="activity-icon">🧪</div>
+          <h4>กิจกรรมสร้างสรรค์</h4>
+          <p>ทำงานฝีมือ เล่นเกม แล้วกิจกรรมสร้างสรรค์อื่นๆ</p>
+        </a>
+
+        <a href="health_kid.html" class="activity-card">
+          <div class="activity-icon">🍎</div>
+          <h4>สุขศึกษา</h4>
+          <p>เรียนรู้เรื่องสุขภาพ ความสะอาด แล้วอาหารที่ดี</p>
+        </a>
+
+        <a href="life_kid.html" class="activity-card">
+          <div class="activity-icon">🤝</div>
+          <h4>ทักษะชีวิต</h4>
+          <p>เรียนรู้ความเป็นมิตร ความสำคัญของความร่วมมือ แล้วการแก้ปัญหา</p>
+        </a>
+      </div>
+    </div>
+
+
+  </div>
+
+  <script>
+  // โหลดข้อมูลนักเรียน
+  function loadStudentData() {
+    const data = JSON.parse(localStorage.getItem("currentRegistration"));
+    
+    if (data) {
+      document.getElementById("studentName").textContent = data.name;
+      document.getElementById("studentGrade").textContent = data.grade;
+      document.getElementById("studentDate").textContent = data.date;
+    }
+  }
+
+  // เรียกฟังก์ชันเมื่อหน้าโหลดเสร็จ
+  window.addEventListener("load", loadStudentData);
+  </script>
+</body>
+</html>

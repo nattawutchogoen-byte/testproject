@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>หน้าประถมศึกษาปีที่ 6</title>
+  <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Itim', cursive;
+      /* Primary School Color Scheme: Blue/Green */
+      background: linear-gradient(135deg, #B0E0E6, #ADD8E6, #90EE90);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .header {
+      /* Header Gradient: Steel Blue to Medium Sea Green */
+      background: linear-gradient(135deg, #4682B4, #3CB371);
+      color: white;
+      padding: 40px 30px;
+      border-radius: 20px;
+      text-align: center;
+      margin-bottom: 30px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      font-size: 1.2rem;
+      opacity: 0.95;
+    }
+
+    .welcome-section {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .welcome-section h2 {
+      /* Accent Color: Darker Blue */
+      color: #1E90FF;
+      font-size: 2rem;
+      margin-bottom: 15px;
+    }
+
+    .welcome-section p {
+      color: #666;
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+
+    .student-info {
+      /* Info Background: Light Blue/Cyan */
+      background: linear-gradient(135deg, #E0FFFF, #B0E0E6);
+      padding: 20px;
+      border-radius: 15px;
+      margin: 20px 0;
+      /* Border Color: Darker Blue */
+      border-left: 5px solid #1E90FF;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      /* Divider Color: Lighter Blue */
+      border-bottom: 1px solid rgba(30, 144, 255, 0.3);
+    }
+
+    .info-row:last-child {
+      border-bottom: none;
+    }
+
+    .info-label {
+      font-weight: bold;
+      color: #333;
+    }
+
+    .info-value {
+      /* Info Value Color: Darker Blue */
+      color: #1E90FF;
+      font-weight: bold;
+    }
+
+    .activities-section {
+      margin-top: 30px;
+    }
+
+    .activities-section h3 {
+      /* Accent Color: Darker Blue */
+      color: #1E90FF;
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .activities-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .activity-card {
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      text-align: center;
+      transition: transform 0.3s, box-shadow 0.3s;
+      /* Card Border: Medium Sea Green */
+      border-top: 5px solid #3CB371;
+    }
+
+    .activity-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+
+    .activity-icon {
+      font-size: 3rem;
+      margin-bottom: 15px;
+    }
+
+    .activity-card h4 {
+      /* Card Title Color: Darker Blue */
+      color: #1E90FF;
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+    }
+
+    .activity-card p {
+      color: #666;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 1.8rem;
+      }
+
+      .activities-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>📚 ยินดีต้อนรับสู่ชั้นประถมศึกษาปีที่ 6</h1>
+      <p>การเรียนรู้ที่สนุกสนานและสร้างสรรค์เพื่ออนาคตที่สดใส</p>
+    </div>
+
+    <div class="welcome-section">
+      <h2>✨ ยินดีต้อนรับนักเรียนประถม!</h2>
+      <p>
+        ที่นี่คือศูนย์รวมวิชาหลักและกิจกรรมเสริมทักษะที่สำคัญ
+        เพื่อเตรียมความพร้อมสำหรับการเติบโตในทุกด้าน
+      </p>
+
+      <div class="student-info">
+        <div class="info-row">
+          <span class="info-label">👤 ชื่อนักเรียน:</span>
+          <span class="info-value" id="studentName">-</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">🎓 ชั้นเรียน:</span>
+          <span class="info-value" id="studentGrade">ประถมศึกษาปีที่ 6</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">📅 วันที่เข้าเรียน:</span>
+          <span class="info-value" id="studentDate">-</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="activities-section">
+      <h3>📖 รายวิชาหลักและกิจกรรมเสริม (ป.6)</h3>
+      <div class="activities-grid">
+        
+        <div class="activity-card">
+          <div class="activity-icon">🇹🇭</div>
+          <h4>ภาษาไทย</h4>
+          <p>การเขียนรายงาน การโต้วาที และการวิเคราะห์ข่าวสาร</p>
+        </div>
+        <div class="activity-card">
+          <div class="activity-icon">🔢</div>
+          <h4>คณิตศาสตร์</h4>
+          <p>อัตราส่วน ร้อยละ และการวิเคราะห์ข้อมูล</p>
+        </div>
+        <div class="activity-card">
+          <div class="activity-icon">🔬</div>
+          <h4>วิทยาศาสตร์</h4>
+          <p>ไฟฟ้า วงจรไฟฟ้า และการเปลี่ยนแปลงทางเคมี</p>
+        </div>
+        <div class="activity-card">
+          <div class="activity-icon">🌍</div>
+          <h4>สังคมศึกษาฯ</h4>
+          <p>โลกยุคปัจจุบัน และปัญหาโลกร้อน</p>
+        </div>
+        <div class="activity-card">
+          <div class="activity-icon">🇬🇧</div>
+          <h4>ภาษาอังกฤษ</h4>
+          <p>การเขียนเรียงความ และการเตรียมตัวสอบเข้า ม.1</p>
+        </div>
+        <div class="activity-card">
+          <div class="activity-icon">💻</div>
+          <h4>เทคโนโลยี</h4>
+          <p>ความปลอดภัยทางไซเบอร์ และการสร้างเว็บไซต์เบื้องต้น</p>
+        </div>
+        <div class="activity-card">
+          <div class="activity-icon">💡</div>
+          <h4>การคิดวิเคราะห์</h4>
+          <p>การอภิปรายและนำเสนอโครงงาน</p>
+        </div>
+        <div class="activity-card">
+          <div class="activity-icon">🤝</div>
+          <h4>คุณธรรมจริยธรรม</h4>
+          <p>ความรับผิดชอบต่อสังคมและสิ่งแวดล้อม</p>
+        </div>
+
+      </div>
+    </div>
+    
+  </div>
+
+  <script>
+  // โหลดข้อมูลนักเรียน
+  function loadStudentData() {
+    const data = JSON.parse(localStorage.getItem("currentRegistration"));
+    
+    if (data) {
+      document.getElementById("studentName").textContent = data.name;
+      // document.getElementById("studentGrade").textContent = data.grade; // Use static grade from HTML
+      document.getElementById("studentDate").textContent = data.date;
+    } else {
+      // Default values for demonstration if no data is found
+      document.getElementById("studentName").textContent = "เด็กชาย/เด็กหญิง ตัวอย่าง";
+      // document.getElementById("studentGrade").textContent = "ประถมศึกษาปีที่ 6"; // Use static grade from HTML
+      document.getElementById("studentDate").textContent = "01 มกราคม 2568";
+    }
+  }
+
+  // เรียกฟังก์ชันเมื่อหน้าโหลดเสร็จ
+  window.addEventListener("load", loadStudentData);
+  </script>
+</body>
+</html>

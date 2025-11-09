@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>เข้าสู่ระบบครู</title>
+  <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Itim', cursive;
+      background: linear-gradient(180deg, #E3F2FD, #BBDEFB);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      background: #fff;
+      padding: 40px 50px;
+      border-radius: 30px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+      animation: popIn 0.6s ease;
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    h1 {
+      color: #1976D2;
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    h1::after {
+      content: " 👩‍🏫";
+      animation: float 2s infinite ease-in-out;
+      display: inline-block;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    .subtitle {
+      color: #666;
+      font-size: 0.95rem;
+      margin-bottom: 30px;
+    }
+
+    label {
+      display: block;
+      text-align: left;
+      color: #666;
+      font-size: 0.95rem;
+      margin-top: 15px;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 5px 0 10px 0;
+      border: 2px solid #90CAF9;
+      border-radius: 20px;
+      font-size: 1rem;
+      outline: none;
+      transition: all 0.2s;
+      background-color: #F3F6FF;
+      box-sizing: border-box;
+      font-family: 'Itim', cursive;
+    }
+
+    input:focus {
+      border-color: #1976D2;
+      background-color: #E3F2FD;
+    }
+
+    button {
+      background-color: #1976D2;
+      color: white;
+      border: none;
+      border-radius: 25px;
+      padding: 12px 30px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-top: 20px;
+      box-shadow: 0 4px 8px rgba(25, 118, 210, 0.3);
+      font-family: 'Itim', cursive;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #1565C0;
+      transform: translateY(-3px);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .back-btn {
+      background-color: #757575;
+      margin-top: 10px;
+    }
+
+    .back-btn:hover {
+      background-color: #616161;
+    }
+
+    .error {
+      display: none;
+      font-size: 1rem;
+      color: #D32F2F;
+      margin-top: 15px;
+      animation: bounce 1s ease;
+    }
+
+    .success {
+      display: none;
+      font-size: 1.2rem;
+      color: #388E3C;
+      margin-top: 15px;
+      animation: bounce 1s ease;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .info-box {
+      background-color: #E3F2FD;
+      border-left: 4px solid #1976D2;
+      padding: 15px;
+      border-radius: 10px;
+      margin: 20px 0;
+      text-align: left;
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 30px 25px;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>เข้าสู่ระบบครู</h1>
+    <p class="subtitle">ระบบจัดการข้อมูลนักเรียน</p>
+
+    <div class="info-box">
+      📌 กรุณากรอกรหัสผ่านครูเพื่อเข้าสู่ระบบ
+    </div>
+
+    <label for="username">ชื่อผู้ใช้</label>
+    <input type="text" id="username" placeholder="กรอกชื่อผู้ใช้">
+
+    <label for="password">รหัสผ่าน</label>
+    <input type="password" id="password" placeholder="กรอกรหัสผ่าน">
+
+    <button id="loginBtn" onclick="login()">เข้าสู่ระบบ</button>
+    <button class="back-btn" onclick="window.location.href='index.html'">กลับหน้าแรก</button>
+
+    <p class="error" id="errorMsg"></p>
+    <p class="success" id="successMsg"></p>
+  </div>
+
+  <script>
+  /**
+   * ฟังก์ชันเข้าสู่ระบบครู
+   * หมายเหตุ: นี่เป็นตัวอย่างเท่านั้น ในระบบจริงต้องเชื่อมต่อกับเซิร์ฟเวอร์
+   */
+  function login() {
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const errorMsg = document.getElementById("errorMsg");
+    const successMsg = document.getElementById("successMsg");
+    const loginBtn = document.getElementById("loginBtn");
+
+    // ซ่อนข้อความเก่า
+    errorMsg.style.display = "none";
+    successMsg.style.display = "none";
+
+    // ตรวจสอบข้อมูล
+    if (!username || !password) {
+      errorMsg.textContent = "❌ กรุณากรอกชื่อผู้ใช้และรหัสผ่าน";
+      errorMsg.style.display = "block";
+      return;
+    }
+
+    // ปิดปุ่มเพื่อป้องกันการคลิกซ้ำ
+    loginBtn.disabled = true;
+    loginBtn.textContent = "กำลังเข้าสู่ระบบ...";
+
+    // จำลองการตรวจสอบ (ในระบบจริงต้องเชื่อมต่อเซิร์ฟเวอร์)
+    // ตัวอย่าง: username = "teacher" password = "1234"
+    setTimeout(() => {
+      if (username === "teacher" && password === "1234") {
+        successMsg.textContent = "✅ เข้าสู่ระบบสำเร็จ!";
+        successMsg.style.display = "block";
+
+        // บันทึกสถานะเข้าสู่ระบบ
+        localStorage.setItem("teacherLoggedIn", "true");
+        localStorage.setItem("teacherName", username);
+
+        // นำไปยังหน้าจัดการข้อมูล
+        setTimeout(() => {
+          window.location.href = "teacher-dashboard.html";
+        }, 1500);
+      } else {
+        errorMsg.textContent = "❌ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง";
+        errorMsg.style.display = "block";
+
+        // เปิดปุ่มใหม่
+        loginBtn.disabled = false;
+        loginBtn.textContent = "เข้าสู่ระบบ";
+      }
+    }, 1000);
+  }
+
+  // อนุญาตให้กด Enter เพื่อเข้าสู่ระบบ
+  document.getElementById("password").addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+      login();
+    }
+  });
+  </script>
+</body>
+</html>

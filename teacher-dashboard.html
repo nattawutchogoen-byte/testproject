@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>แดชบอร์ดครู</title>
+  <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Itim', cursive;
+      background: linear-gradient(180deg, #E3F2FD, #BBDEFB);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #1976D2, #1565C0);
+      color: white;
+      padding: 30px;
+      border-radius: 15px;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header h1 {
+      font-size: 2rem;
+    }
+
+    .header-info {
+      text-align: right;
+    }
+
+    .header-info p {
+      margin: 5px 0;
+      font-size: 0.95rem;
+    }
+
+    .logout-btn {
+      background-color: #D32F2F;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      padding: 10px 20px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: 0.3s;
+      font-family: 'Itim', cursive;
+      margin-top: 10px;
+    }
+
+    .logout-btn:hover {
+      background-color: #C62828;
+      transform: translateY(-2px);
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 2.5rem;
+      color: #1976D2;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+
+    .stat-label {
+      color: #666;
+      font-size: 0.95rem;
+    }
+
+    .table-section {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .table-section h2 {
+      color: #1976D2;
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead {
+      background-color: #E3F2FD;
+      border-bottom: 3px solid #1976D2;
+    }
+
+    th {
+      padding: 15px;
+      text-align: left;
+      color: #1976D2;
+      font-weight: bold;
+    }
+
+    td {
+      padding: 12px 15px;
+      border-bottom: 1px solid #E0E0E0;
+    }
+
+    tbody tr:hover {
+      background-color: #F5F5F5;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px;
+      color: #999;
+    }
+
+    .empty-state-icon {
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+
+    .filter-section {
+      margin-bottom: 20px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .filter-section select {
+      padding: 10px 15px;
+      border: 2px solid #90CAF9;
+      border-radius: 20px;
+      font-family: 'Itim', cursive;
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .header {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .header-info {
+        text-align: center;
+        margin-top: 15px;
+      }
+
+      table {
+        font-size: 0.9rem;
+      }
+
+      th, td {
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div>
+      <h1>👩‍🏫 แดชบอร์ดครู</h1>
+      <p>ระบบจัดการข้อมูลนักเรียน</p>
+    </div>
+    <div class="header-info">
+      <p>ยินดีต้อนรับ: <strong id="teacherName">-</strong></p>
+      <button class="logout-btn" onclick="logout()">ออกจากระบบ</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-label">📚 ทั้งหมด</div>
+        <div class="stat-number" id="totalCount">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">🎈 อนุบาล</div>
+        <div class="stat-number" id="kindergartenCount">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">📖 ประถมศึกษา</div>
+        <div class="stat-number" id="primaryCount">0</div>
+      </div>
+    </div>
+
+    <div class="table-section">
+      <h2>📋 รายชื่อนักเรียนที่สมัคร</h2>
+
+      <div class="filter-section">
+        <select id="filterLevel" onchange="filterTable()">
+          <option value="">-- ทั้งหมด --</option>
+          <option value="อนุบาล">อนุบาล</option>
+          <option value="ประถม">ประถม</option>
+        </select>
+      </div>
+
+      <table id="registrationTable">
+        <thead>
+          <tr>
+            <th>ลำดับที่</th>
+            <th>ชื่อ - นามสกุล</th>
+            <th>ระดับชั้น</th>
+            <th>ชั้นเรียน</th>
+            <th>วันที่สมัคร</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <tr>
+            <td colspan="5" class="empty-state">
+              <div class="empty-state-icon">📭</div>
+              <div>ยังไม่มีข้อมูลนักเรียน</div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+  // ตรวจสอบว่าครูเข้าสู่ระบบแล้วหรือไม่
+  function checkLogin() {
+    const isLoggedIn = localStorage.getItem("teacherLoggedIn");
+    const teacherName = localStorage.getItem("teacherName");
+
+    if (!isLoggedIn) {
+      window.location.href = "teacher-login.html";
+      return;
+    }
+
+    document.getElementById("teacherName").textContent = teacherName || "ครู";
+  }
+
+  // โหลดข้อมูลนักเรียน
+  function loadRegistrationData() {
+    const logs = JSON.parse(localStorage.getItem("userLogs") || "[]");
+    const tableBody = document.getElementById("tableBody");
+    const totalCount = document.getElementById("totalCount");
+    const kindergartenCount = document.getElementById("kindergartenCount");
+    const primaryCount = document.getElementById("primaryCount");
+
+    // นับจำนวน
+    let kg = 0, pr = 0;
+    logs.forEach(log => {
+      if (log.level === "อนุบาล") kg++;
+      if (log.level === "ประถม") pr++;
+    });
+
+    totalCount.textContent = logs.length;
+    kindergartenCount.textContent = kg;
+    primaryCount.textContent = pr;
+
+    // แสดงตาราง
+    if (logs.length === 0) {
+      tableBody.innerHTML = `
+        <tr>
+          <td colspan="5" class="empty-state">
+            <div class="empty-state-icon">📭</div>
+            <div>ยังไม่มีข้อมูลนักเรียน</div>
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    tableBody.innerHTML = logs.map((log, index) => `
+      <tr>
+        <td>${index + 1}</td>
+        <td>${log.name}</td>
+        <td>${log.level}</td>
+        <td>${log.grade}</td>
+        <td>${log.date}</td>
+      </tr>
+    `).join("");
+  }
+
+  // ฟังก์ชันกรองข้อมูล
+  function filterTable() {
+    const filterLevel = document.getElementById("filterLevel").value;
+    const logs = JSON.parse(localStorage.getItem("userLogs") || "[]");
+    const tableBody = document.getElementById("tableBody");
+
+    let filtered = logs;
+    if (filterLevel) {
+      filtered = logs.filter(log => log.level === filterLevel);
+    }
+
+    if (filtered.length === 0) {
+      tableBody.innerHTML = `
+        <tr>
+          <td colspan="5" class="empty-state">
+            <div class="empty-state-icon">📭</div>
+            <div>ไม่มีข้อมูลที่ตรงกับเงื่อนไข</div>
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    tableBody.innerHTML = filtered.map((log, index) => `
+      <tr>
+        <td>${index + 1}</td>
+        <td>${log.name}</td>
+        <td>${log.level}</td>
+        <td>${log.grade}</td>
+        <td>${log.date}</td>
+      </tr>
+    `).join("");
+  }
+
+  // ฟังก์ชันออกจากระบบ
+  function logout() {
+    if (confirm("คุณแน่ใจหรือว่าต้องการออกจากระบบ?")) {
+      localStorage.removeItem("teacherLoggedIn");
+      localStorage.removeItem("teacherName");
+      window.location.href = "index.html";
+    }
+  }
+
+  // เรียกฟังก์ชันเมื่อหน้าโหลดเสร็จ
+  window.addEventListener("load", () => {
+    checkLogin();
+    loadRegistrationData();
+  });
+  </script>
+</body>
+</html>

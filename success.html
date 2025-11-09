@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>สมัครสมาชิกสำเร็จ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Itim', cursive;
+      background: linear-gradient(180deg, #E8F5E9, #C8E6C9);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      background: #fff;
+      padding: 40px 50px;
+      border-radius: 30px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 450px;
+      width: 100%;
+      animation: popIn 0.6s ease;
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .success-icon {
+      font-size: 4rem;
+      animation: bounce 1s infinite ease-in-out;
+      margin-bottom: 20px;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+
+    h1 {
+      color: #4CAF50;
+      font-size: 2rem;
+      margin: 10px 0;
+    }
+
+    .subtitle {
+      color: #666;
+      font-size: 1rem;
+      margin-bottom: 30px;
+    }
+
+    .info-box {
+      background: linear-gradient(135deg, #E8F5E9, #F1F8E9);
+      border-left: 5px solid #4CAF50;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px 0;
+      text-align: left;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .info-row:last-child {
+      border-bottom: none;
+    }
+
+    .info-label {
+      font-weight: bold;
+      color: #333;
+    }
+
+    .info-value {
+      color: #4CAF50;
+      font-weight: bold;
+    }
+
+    .button-group {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 30px;
+    }
+
+    button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 25px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+      font-family: 'Itim', cursive;
+      font-weight: bold;
+      min-width: 200px;
+    }
+
+    .btn-home {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    .btn-home:hover {
+      background-color: #45a049;
+      transform: translateY(-3px);
+      box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
+    }
+
+    .btn-register {
+      background-color: #2196F3;
+      color: white;
+    }
+
+    .btn-register:hover {
+      background-color: #0b7dda;
+      transform: translateY(-3px);
+      box-shadow: 0 4px 8px rgba(33, 150, 243, 0.3);
+    }
+
+    .note {
+      background-color: #FFF9E6;
+      border: 2px solid #FFD166;
+      border-radius: 15px;
+      padding: 15px;
+      margin-top: 20px;
+      font-size: 0.95rem;
+      color: #666;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 30px 25px;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      .success-icon {
+        font-size: 3rem;
+      }
+
+      .button-group {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="success-icon">✅</div>
+    <h1>สมัครสมาชิกสำเร็จ!</h1>
+    <p class="subtitle">ยินดีต้อนรับสู่ครอบครัวของเรา</p>
+
+    <div class="info-box">
+      <div class="info-row">
+        <span class="info-label">ชื่อ - นามสกุล:</span>
+        <span class="info-value" id="displayName">-</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">ระดับชั้น:</span>
+        <span class="info-value" id="displayLevel">-</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">ชั้นเรียน:</span>
+        <span class="info-value" id="displayGrade">-</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">วันที่สมัคร:</span>
+        <span class="info-value" id="displayDate">-</span>
+      </div>
+    </div>
+
+    <div class="note">
+      📝 ข้อมูลของคุณได้ถูกบันทึกเรียบร้อยแล้ว
+    </div>
+
+    <div class="button-group">
+      <button class="btn-register" onclick="goToNextPage()">
+        ➡️ ไปหน้าถัดไป
+      </button>
+    </div>
+  </div>
+
+  <script>
+  // โหลดข้อมูลจาก localStorage และแสดงผล
+  function loadRegistrationData() {
+    const data = JSON.parse(localStorage.getItem("currentRegistration"));
+    
+    if (data) {
+      document.getElementById("displayName").textContent = data.name;
+      document.getElementById("displayLevel").textContent = data.level;
+      document.getElementById("displayGrade").textContent = data.grade;
+      document.getElementById("displayDate").textContent = data.date;
+    }
+  }
+
+  // ฟังก์ชันไปหน้าถัดไป
+  function goToNextPage() {
+    const data = JSON.parse(localStorage.getItem("currentRegistration"));
+    const fileMap = {
+      "ป.1": "p1.html",
+      "ป.2": "p2.html",
+      "ป.3": "p3.html",
+      "ป.4": "p4.html",
+      "ป.5": "p5.html",
+      "ป.6": "p6.html",
+      "อนุบาล 1": "kid1-3.html",
+      "อนุบาล 2": "kid1-3.html",
+      "อนุบาล 3": "kid1-3.html"
+    };
+    const grade = data ? data.grade : "อนุบาล 1";
+    window.location.href = fileMap[grade] || "kid1-3.html";
+  }
+
+  // เรียกฟังก์ชันเมื่อหน้าโหลดเสร็จ
+  window.addEventListener("load", loadRegistrationData);
+  </script>
+</body>
+</html>
