@@ -94,7 +94,7 @@ button {
   <h2>เฉลยแบบฝึกหัด</h2>
   <div id="score"></div>
   <div id="results"></div>
-<button id="backBtn" onclick="window.location.href='p2.html'">กลับหน้าแรก</button>
+<button id="backBtn" type="button">กลับหน้าแรก</button>
 </div>
 
 <script>
@@ -124,7 +124,8 @@ const resultPage = document.getElementById("resultPage");
 const resultsDiv = document.getElementById("results");
 const scoreEl = document.getElementById("score");
 
-    document.getElementById("backBtn").addEventListener("click", function () {
+document.getElementById("backBtn").addEventListener("click", function(event) {
+    event.preventDefault();
     window.location.href = "p2.html";
 });
 
