@@ -99,13 +99,7 @@
       background-color: #FF1493;
     }
 
-    .result {
-      text-align: center;
-      margin-top: 20px;
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: #FF1493;
-    }
+    
   </style>
 </head>
 <body>
@@ -120,9 +114,10 @@
       <button type="submit" class="submit-btn">ส่งคำตอบ</button>
     </form>
 
-    <div id="quizResult" class="result" style="display: none;"></div>
+    
   </div>
 
+  
   <script>
     const QUIZ_DATA = [
         {"q": "การวิ่งใช้ส่วนใดของร่างกาย?", "options": ["มือ", "เท้า", "ศีรษะ", "ไหล่"], "answer": "เท้า"},
@@ -139,7 +134,6 @@
 
     document.addEventListener('DOMContentLoaded', () => {
       const quizForm = document.getElementById('quizForm');
-      const quizResult = document.getElementById('quizResult');
       const submitBtn = quizForm.querySelector('.submit-btn');
       const questionsContainer = document.createElement('div');
       quizForm.insertBefore(questionsContainer, submitBtn);
@@ -169,36 +163,25 @@
         questionsContainer.innerHTML = html;
       }
 
-      // Function to check answers
+      // Function to check answers (redirect logic)
       function checkAnswers(e) {
         e.preventDefault();
         
         let score = 0;
         let totalQuestions = QUIZ_DATA.length;
+        let subject = document.querySelector('.header h1').textContent.replace('แบบฝึกหัด', '').trim();
 
         QUIZ_DATA.forEach((qData, index) => {
           const qNum = index + 1;
           const selectedOption = quizForm.querySelector(`input[name="q${qNum}"]:checked`);
           
-          const questionCard = questionsContainer.querySelector(`.question-card:nth-child(${qNum})`).style;
-          questionCard.borderLeft = '5px solid #FF1493'; // Reset color
-
-          if (selectedOption) {
-            if (selectedOption.value === qData.answer) {
-              score++;
-              questionCard.borderLeft = '5px solid green'; // Correct
-            } else {
-              questionCard.borderLeft = '5px solid red'; // Incorrect
-            }
+          if (selectedOption && selectedOption.value === qData.answer) {
+            score++;
           }
         });
 
-        quizResult.textContent = `ผลลัพธ์: คุณทำได้ ${score}/${totalQuestions} คะแนน`;
-        quizResult.style.display = 'block';
-        
-        // Disable form after submission
-        submitBtn.disabled = true;
-        quizForm.querySelectorAll('input').forEach(input => input.disabled = true);
+        // Redirect to result.html with score, total, and subject as URL parameters
+        window.location.href = `result.html?score=${score}&total=${totalQuestions}&subject=${subject}`;
       }
 
       // Initial render and event listener setup
@@ -206,5 +189,6 @@
       quizForm.addEventListener('submit', checkAnswers);
     });
   </script>
+
 </body>
 </html>

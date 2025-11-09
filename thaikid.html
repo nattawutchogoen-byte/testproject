@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -98,19 +99,13 @@
       background-color: #FF1493;
     }
 
-    .result {
-      text-align: center;
-      margin-top: 20px;
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: #FF1493;
-    }
+    
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
-      <h1>แบบฝึกหัดวิชาภาษาไทย</h1>
+      <h1>แบบฝึกหัดภาษาไทย</h1>
       <p>ชั้นอนุบาล - จำนวน 10 ข้อ</p>
     </div>
 
@@ -119,26 +114,26 @@
       <button type="submit" class="submit-btn">ส่งคำตอบ</button>
     </form>
 
-    <div id="quizResult" class="result" style="display: none;"></div>
+    
   </div>
 
+  
   <script>
     const QUIZ_DATA = [
-        {"q": "พยัญชนะตัวแรกของไทยคืออะไร?", "options": ["ก", "ข", "ค", "ง"], "answer": "ก"},
-        {"q": "สระเสียงสั้นในคำว่า 'ปลา' คือสระอะไร?", "options": ["สระอา", "สระอิ", "สระอุ", "ไม่มีสระเสียงสั้น"], "answer": "สระอา"},
-        {"q": "คำใดสะกดด้วย 'มานะ'?", "options": ["มะนา", "มานะ", "นามะ", "นะมา"], "answer": "มานะ"},
-        {"q": "พยัญชนะตัวใดที่ออกเสียงเหมือน 'งู'?", "options": ["น", "ม", "ง", "ล"], "answer": "ง"},
-        {"q": "คำว่า 'พ่อ' มีสระอะไร?", "options": ["สระออ", "สระเอ", "สระอี", "สระโอ"], "answer": "สระออ"},
-        {"q": "คำว่า 'แม่' มีวรรณยุกต์อะไร?", "options": ["เอก", "โท", "ตรี", "จัตวา"], "answer": "โท"},
-        {"q": "คำว่า 'ไก่' มีพยัญชนะต้นคืออะไร?", "options": ["ก", "ข", "ค", "ง"], "answer": "ก"},
-        {"q": "คำว่า 'ตา' หมายถึงอะไร?", "options": ["อวัยวะที่ใช้มอง", "อวัยวะที่ใช้ฟัง", "อวัยวะที่ใช้ดม", "อวัยวะที่ใช้พูด"], "answer": "อวัยวะที่ใช้มอง"},
-        {"q": "พยัญชนะตัวใดที่อยู่ท้ายคำว่า 'บ้าน'?", "options": ["น", "ม", "บ", "ท"], "answer": "น"},
-        {"q": "คำว่า 'ดีใจ' มีกี่พยางค์?", "options": ["หนึ่ง", "สอง", "สาม", "สี่"], "answer": "สอง"}
+        {"q": "พยัญชนะตัวแรกของไทยคืออะไร?", "options": ["ข", "ก", "ค", "ง"], "answer": "ก"},
+        {"q": "สระใดที่ออกเสียงเหมือน 'อา'?", "options": ["สระอิ", "สระอุ", "สระอา", "สระเอะ"], "answer": "สระอา"},
+        {"q": "คำว่า 'แม่' มีพยัญชนะต้นคืออะไร?", "options": ["ม", "อ", "แ", "ไ"], "answer": "ม"},
+        {"q": "คำว่า 'ปลา' มีสระอะไร?", "options": ["สระอา", "สระอิ", "สระอุ", "สระเอ"], "answer": "สระอา"},
+        {"q": "คำใดที่สะกดด้วย 'น'?", "options": ["กา", "มา", "กิน", "ดู"], "answer": "กิน"},
+        {"q": "พยัญชนะใดที่คล้ายกับ 'งู'?", "options": ["ก", "ข", "ง", "จ"], "answer": "ง"},
+        {"q": "คำว่า 'บ้าน' มีวรรณยุกต์อะไร?", "options": ["เอก", "โท", "ตรี", "จัตวา"], "answer": "โท"},
+        {"q": "คำใดที่ออกเสียงสั้น?", "options": ["มา", "ไป", "ดี", "มะ"], "answer": "มะ"},
+        {"q": "คำว่า 'พ่อ' มีสระอะไร?", "options": ["สระออ", "สระเอ", "สระอี", "สระแอ"], "answer": "สระออ"},
+        {"q": "คำใดที่ใช้เรียกตัวเอง (ผู้หญิง)?", "options": ["ผม", "ฉัน", "เรา", "ท่าน"], "answer": "ฉัน"}
     ];
 
     document.addEventListener('DOMContentLoaded', () => {
       const quizForm = document.getElementById('quizForm');
-      const quizResult = document.getElementById('quizResult');
       const submitBtn = quizForm.querySelector('.submit-btn');
       const questionsContainer = document.createElement('div');
       quizForm.insertBefore(questionsContainer, submitBtn);
@@ -168,36 +163,25 @@
         questionsContainer.innerHTML = html;
       }
 
-      // Function to check answers
+      // Function to check answers (redirect logic)
       function checkAnswers(e) {
         e.preventDefault();
         
         let score = 0;
         let totalQuestions = QUIZ_DATA.length;
+        let subject = document.querySelector('.header h1').textContent.replace('แบบฝึกหัด', '').trim();
 
         QUIZ_DATA.forEach((qData, index) => {
           const qNum = index + 1;
           const selectedOption = quizForm.querySelector(`input[name="q${qNum}"]:checked`);
           
-          const questionCard = questionsContainer.querySelector(`.question-card:nth-child(${qNum})`).style;
-          questionCard.borderLeft = '5px solid #FF1493'; // Reset color
-
-          if (selectedOption) {
-            if (selectedOption.value === qData.answer) {
-              score++;
-              questionCard.borderLeft = '5px solid green'; // Correct
-            } else {
-              questionCard.borderLeft = '5px solid red'; // Incorrect
-            }
+          if (selectedOption && selectedOption.value === qData.answer) {
+            score++;
           }
         });
 
-        quizResult.textContent = `ผลลัพธ์: คุณทำได้ ${score}/${totalQuestions} คะแนน`;
-        quizResult.style.display = 'block';
-        
-        // Disable form after submission
-        submitBtn.disabled = true;
-        quizForm.querySelectorAll('input').forEach(input => input.disabled = true);
+        // Redirect to result.html with score, total, and subject as URL parameters
+        window.location.href = `result.html?score=${score}&total=${totalQuestions}&subject=${subject}`;
       }
 
       // Initial render and event listener setup
@@ -205,5 +189,6 @@
       quizForm.addEventListener('submit', checkAnswers);
     });
   </script>
+
 </body>
 </html>
