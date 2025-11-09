@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz วิทยาศาสตร์ ป.2</title>
+<style>
+body { font-family: Arial, sans-serif; background: #f0f4f8; margin: 0; padding: 0; text-align: center; }
+.container { max-width: 700px; margin: 30px auto; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align:left; }
+h2, h3 { margin-bottom: 10px; }
+button { padding: 10px 20px; margin: 10px; cursor: pointer; border-radius: 5px; border: none; font-size: 16px; transition: 0.3s; text-align:center; }
+button:disabled { cursor: default; }
+.nextBtn { background-color: #007bff; color: white; }
+.nextBtn:hover { background-color: #0056b3; }
+.prevBtn { background-color: #6c757d; color: white; }
+.prevBtn:hover { background-color: #5a6268; }
+.answers button { display: block; margin: 5px 0; width: 100%; text-align:left; padding-left:10px; }
+.correct { background-color: #d4edda; color: #155724; pointer-events:none; }
+.wrong { background-color: #f8d7da; color: #721c24; pointer-events:none; }
+.explanation { font-size: 14px; margin: 5px 0 15px 20px; }
+.hidden { display: none; }
+#loading { font-size: 24px; color: #007bff; text-align:center; }
+.buttonRow { display: flex; justify-content: space-between; margin-top: 20px; }
+#backBtn { margin-top: 20px; background: #28a745; text-align:center; }
+#backBtn:hover { background: #1e7e34; }
+
+
+body {
+    font-family: Arial, sans-serif;
+    background: url('bg.png') no-repeat center center fixed;
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    font-size: 18px; /* ฟอนต์ใหญ่ขึ้นนิดหน่อย */
+}
+
+h1 {
+    font-size: 28px; /* หัวเรื่องใหญ่ขึ้น */
+}
+
+h2 {
+    font-size: 22px; /* คำถาม / หน้า loading */
+}
+
+h3 {
+    font-size: 20px; /* ข้อคำถามแต่ละข้อ */
+}
+
+button {
+    padding: 12px 24px;
+    font-size: 18px; /* ปุ่มใหญ่ขึ้น */
+}
+
+.explanation {
+    font-size: 16px; /* คำอธิบายใหญ่ขึ้น */
+}
+
+#backBtn {
+    display: block;
+    margin: 20px auto;
+    background-color: #2e7d32; /* สีเขียว */
+    color: white;
+    padding: 10px 25px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#backBtn:hover {
+    background-color: #43a047; /* สีเขียวอ่อนตอน hover */
+}
+
+
+
+</style>
+</head>
+<body>
+
+<div id="quizPage" class="container">
+  <h1>แบบฝึกหัดวิทยาศาสตร์ ป.2</h1>
+  <h2 id="question"></h2>
+  <div id="answers" class="answers"></div>
+  <div class="buttonRow" id="buttonRow"></div>
+</div>
+
+<div id="loadingPage" class="container hidden">
+  <h2 id="loading">กำลังส่งคำตอบ...</h2>
+</div>
+
+<div id="resultPage" class="container hidden">
+  <h2>เฉลยแบบฝึกหัด</h2>
+  <div id="score"></div>
+  <div id="results"></div>
+  <button id="backBtn">กลับหน้าแรก</button>
+</div>
+
+<script>
+const quizData = [
+  { question: "ข้อ 1: สิ่งมีชีวิตอะไรที่เรามองเห็นได้ด้วยตาเปล่า?", answers: ["แบคทีเรีย","มด","ไวรัส","ออกซิเจน"], correct: 1, explanation: "มดเป็นสิ่งมีชีวิตที่มองเห็นได้ด้วยตา ส่วนแบคทีเรียและไวรัสเล็กเกินไป ออกซิเจนเป็นก๊าซ" },
+  { question: "ข้อ 2: น้ำเปลี่ยนจากของเหลวเป็นไอเรียกว่าอะไร?", answers: ["การละลาย","การระเหย","การแข็งตัว","การควบแน่น"], correct: 1, explanation: "น้ำระเหยจากของเหลวเป็นไอ เรียกว่าการระเหย" },
+  { question: "ข้อ 3: ดาวที่อยู่กลางวันมีแสงสว่างคือ?", answers: ["ดวงจันทร์","ดวงอาทิตย์","ดาวศุกร์","ดาวอังคาร"], correct: 1, explanation: "ดวงอาทิตย์ให้แสงสว่างในเวลากลางวัน" },
+  { question: "ข้อ 4: พืชต้องการอะไรในการสร้างอาหาร?", answers: ["น้ำและดิน","แสงแดด น้ำ และคาร์บอนไดออกไซด์","น้ำและอากาศ","ดินและอากาศ"], correct: 1, explanation: "พืชใช้แสงแดด น้ำ และคาร์บอนไดออกไซด์สร้างอาหาร" },
+  { question: "ข้อ 5: สัตว์ใดที่มีปีกและบินได้?", answers: ["ช้าง","นก","ปลา","แมว"], correct: 1, explanation: "นกมีปีกและบินได้ ส่วนช้าง ปลา และแมวบินไม่ได้" },
+  { question: "ข้อ 6: อะไรเป็นแหล่งพลังงานหลักของร่างกายเรา?", answers: ["น้ำ","อาหาร","ออกซิเจน","แสงแดด"], correct: 1, explanation: "ร่างกายได้พลังงานหลักจากอาหาร" },
+  { question: "ข้อ 7: สภาพอากาศที่มีฝนตกมากเรียกว่า?", answers: ["แห้งแล้ง","ฝนตกหนัก","พายุ","หิมะ"], correct: 1, explanation: "ฝนตกหนักหมายถึงสภาพอากาศมีฝนมาก" },
+  { question: "ข้อ 8: วัสดุใดนำไฟฟ้าได้ดีที่สุด?", answers: ["ไม้","ทองแดง","พลาสติก","ยาง"], correct: 1, explanation: "ทองแดงเป็นตัวนำไฟฟ้าที่ดี ส่วนอื่นไม่ดีเท่าทองแดง" },
+  { question: "ข้อ 9: การสังเกตด้วยตาและการทดลองเป็นวิธีการใด?", answers: ["วิธีวิทยาศาสตร์","วิธีคณิตศาสตร์","วิธีศิลปะ","วิธีภูมิศาสตร์"], correct: 0, explanation: "การสังเกตและทดลองเป็นส่วนหนึ่งของวิธีวิทยาศาสตร์" },
+  { question: "ข้อ 10: สิ่งใดเป็นตัวอย่างของพลังงานหมุนเวียน?", answers: ["น้ำมันเชื้อเพลิง","ถ่านหิน","พลังงานลม","ก๊าซธรรมชาติ"], correct: 2, explanation: "พลังงานลมเป็นพลังงานหมุนเวียน ส่วนอื่นไม่หมุนเวียน" }
+];
+
+let currentQuestion = 0;
+let userAnswers = [];
+
+const questionEl = document.getElementById("question");
+const answersEl = document.getElementById("answers");
+const buttonRow = document.getElementById("buttonRow");
+
+const quizPage = document.getElementById("quizPage");
+const loadingPage = document.getElementById("loadingPage");
+const resultPage = document.getElementById("resultPage");
+const resultsDiv = document.getElementById("results");
+const scoreEl = document.getElementById("score");
+
+    document.getElementById("backBtn").addEventListener("click", function () {
+    window.location.href = "p2.html";
+});
+
+
+
+const choiceLabels = ["ก.","ข.","ค.","ง."];
+
+let selectedAnswer = -1;
+
+function loadQuestion() {
+  const q = quizData[currentQuestion];
+  questionEl.textContent = q.question;
+  answersEl.innerHTML = "";
+  q.answers.forEach((ans,idx)=>{
+    const btn = document.createElement("button");
+    btn.textContent = choiceLabels[idx]+" "+ans;
+    btn.onclick = ()=>selectAnswer(idx);
+    answersEl.appendChild(btn);
+  });
+  selectedAnswer = userAnswers[currentQuestion] !== undefined ? userAnswers[currentQuestion] : -1;
+  if(selectedAnswer!==-1) answersEl.children[selectedAnswer].style.background="#a0c4ff";
+
+  buttonRow.innerHTML = "";
+  if(currentQuestion === 0){
+    // ข้อ1: ปุ่มถัดไปตรงกลาง
+    const nextBtn = document.createElement("button");
+    nextBtn.textContent = "ถัดไป";
+    nextBtn.className = "nextBtn";
+    nextBtn.onclick = nextQuestion;
+    nextBtn.style.margin = "0 auto";
+    buttonRow.appendChild(nextBtn);
+  } else {
+    // ข้อ2-10: ปุ่มย้อนกลับซ้าย, ปุ่มถัดไปขวา
+    const prevBtn = document.createElement("button");
+    prevBtn.textContent = "ย้อนกลับ";
+    prevBtn.className = "prevBtn";
+    prevBtn.onclick = prevQuestion;
+    buttonRow.appendChild(prevBtn);
+
+    const nextBtn = document.createElement("button");
+    nextBtn.textContent = currentQuestion===quizData.length-1 ? "ส่งคำตอบ" : "ถัดไป";
+    nextBtn.className = "nextBtn";
+    nextBtn.onclick = nextQuestion;
+    buttonRow.appendChild(nextBtn);
+
+
+  }
+}
+
+function selectAnswer(idx){
+  selectedAnswer = idx;
+  Array.from(answersEl.children).forEach(b=>b.style.background="");
+  answersEl.children[idx].style.background="#a0c4ff";
+}
+
+function nextQuestion(){
+  if(selectedAnswer===-1){
+    alert("กรุณาเลือกคำตอบก่อนกดถัดไป");
+    return;
+  }
+  userAnswers[currentQuestion]=selectedAnswer;
+  if(currentQuestion<quizData.length-1){
+    currentQuestion++;
+    loadQuestion();
+  } else {
+    quizPage.classList.add("hidden");
+    loadingPage.classList.remove("hidden");
+    setTimeout(showResult,1500);
+  }
+}
+
+function prevQuestion(){
+  userAnswers[currentQuestion]=selectedAnswer;
+  if(currentQuestion>0){
+    currentQuestion--;
+    loadQuestion();
+  }
+}
+
+function showResult(){
+  loadingPage.classList.add("hidden");
+  resultPage.classList.remove("hidden");
+  resultsDiv.innerHTML = "";
+  let score = 0;
+  quizData.forEach((q,i)=>{
+    const div = document.createElement("div");
+    const userAns = userAnswers[i];
+    const correct = q.correct;
+    if(userAns===correct) score++;
+
+    let ansHTML="";
+    q.answers.forEach((a,j)=>{
+      let cls="";
+      if(j===correct) cls="correct"; 
+      if(userAns===j && userAns!==correct) cls="wrong"; 
+      ansHTML += `<button class="${cls}" disabled>${choiceLabels[j]} ${a}</button>`;
+    });
+
+    div.innerHTML = ` <h3>${q.question}</h3>${ansHTML}<div class="explanation">คำอธิบาย: ${q.explanation}</div>`;
+    resultsDiv.appendChild(div);
+  });
+
+
+  scoreEl.innerHTML = `คุณได้คะแนน <span style="color:#007bff; font-weight:bold; font-size:20px;">${score}/${quizData.length}</span>`;
+}
+
+
+backBtn.onclick = ()=>{
+  resultPage.classList.add("hidden");
+  quizPage.classList.remove("hidden");
+  currentQuestion = 0;
+  userAnswers = [];
+  selectedAnswer = -1;
+  loadQuestion();
+}
+
+loadQuestion();
+</script>
+
+</body>
+</html>
