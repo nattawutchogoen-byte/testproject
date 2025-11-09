@@ -100,41 +100,35 @@
       50% { transform: translateY(-8px); }
     }
 
+    .teacher-login-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 25px;
+      background: #ffb703;
+      color: white;
+      font-family: 'Itim', cursive;
+      font-size: 16px;
+      border: none;
+      border-radius: 50px;
+      padding: 12px 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      opacity: 0.9;
+      z-index: 1000;
+    }
 
+    .teacher-login-btn:hover {
+      background: #ffa500;
+      transform: scale(1.05);
+      opacity: 1;
+    }
 
-.teacher-login-btn {
-  position: fixed;
-  bottom: 20px;
-  right: 25px;
-  background: #ffb703;
-  color: white;
-  font-family: 'Itim', cursive;
-  font-size: 16px;
-  border: none;
-  border-radius: 50px;
-  padding: 12px 20px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  cursor: pointer;
-  transition: all 0.3s ease;
-  opacity: 0.9;
-  z-index: 1000;
-}
-
-.teacher-login-btn:hover {
-  background: #ffa500;
-  transform: scale(1.05);
-  opacity: 1;
-}
-
-
-
-
-@media (max-width: 600px) {
-  .teacher-login-btn {
-    display: none;
-  }
-}
-
+    @media (max-width: 600px) {
+      .teacher-login-btn {
+        display: none;
+      }
+    }
   </style>
 </head>
 <body>
@@ -161,92 +155,71 @@
   <audio id="successSound" src="https://cdn.pixabay.com/download/audio/2023/03/21/audio_cbf29a319e.mp3?filename=correct-answer-3-126467.mp3"></audio>
 
   <script>
+  function updateGradeOptions() {
+    const level = document.getElementById("level").value;
+    const grade = document.getElementById("grade");
+    grade.innerHTML = '<option value="">-- เลือกชั้นเรียน --</option>';
 
-
-
-
-    function updateGradeOptions() {
-      const level = document.getElementById("level").value;
-      const grade = document.getElementById("grade");
-      grade.innerHTML = '<option value="">-- เลือกชั้นเรียน --</option>';
-
-      if (level === "อนุบาล") {
-        ["อนุบาล 1", "อนุบาล 2", "อนุบาล 3"].forEach(lv => {
-          const opt = document.createElement("option");
-          opt.value = lv;
-          opt.textContent = lv;
-          grade.appendChild(opt);
-        });
-      } else if (level === "ประถม") {
-        ["ป.1", "ป.2", "ป.3", "ป.4", "ป.5", "ป.6"].forEach(lv => {
-          const opt = document.createElement("option");
-          opt.value = lv;
-          opt.textContent = lv;
-          grade.appendChild(opt);
-        });
-      }
-    }
-
-    function register() {
-      const name = document.getElementById("name").value.trim();
-      const level = document.getElementById("level").value;
-      const grade = document.getElementById("grade").value;
-      const successMsg = document.getElementById("successMsg");
-      const sound = document.getElementById("successSound");
-
-      if (!name || !level || !grade) {
-        alert("กรุณากรอกข้อมูลให้ครบถ้วนก่อนสมัคร");
-        return;
-      }
-
-      const userLogs = JSON.parse(localStorage.getItem("userLogs") || "[]");
-      userLogs.push({
-        name,
-        level: grade,
-        date: new Date().toLocaleString("th-TH")
+    if (level === "อนุบาล") {
+      ["อนุบาล 1", "อนุบาล 2", "อนุบาล 3"].forEach(lv => {
+        const opt = document.createElement("option");
+        opt.value = lv;
+        opt.textContent = lv;
+        grade.appendChild(opt);
       });
-      localStorage.setItem("userLogs", JSON.stringify(userLogs));
+    } else if (level === "ประถม") {
+      ["ป.1", "ป.2", "ป.3", "ป.4", "ป.5", "ป.6"].forEach(lv => {
+        const opt = document.createElement("option");
+        opt.value = lv;
+        opt.textContent = lv;
+        grade.appendChild(opt);
+      });
+    }
+  }
 
-      successMsg.style.display = "block";
-      sound.play();
+  function register() {
+    const name = document.getElementById("name").value.trim();
+    const level = document.getElementById("level").value;
+    const grade = document.getElementById("grade").value;
+    const successMsg = document.getElementById("successMsg");
+    const sound = document.getElementById("successSound");
 
-    
-      setTimeout(() => {
-        const fileMap = {
-          "ป.1": "p1.html",
-          "ป.2": "p2.html",
-          "ป.3": "p3.html",
-          "ป.4": "p4.html",
-          "ป.5": "p5.html",
-          "ป.6": "p6.html",
-          "อนุบาล 1": "kid1-3.html",
-          "อนุบาล 2": "kid1-3.html",
-          "อนุบาล 3": "kid1-3.html"
-        };
-        window.location.href = fileMap[grade] || "index.html";
-      }, 1500);
-
-
-
-
-
-
-
-
+    if (!name || !level || !grade) {
+      alert("กรุณากรอกข้อมูลให้ครบถ้วนก่อนสมัคร");
+      return;
     }
 
+    // 🧠 เก็บข้อมูลผู้สมัครไว้ใน localStorage
+    const logs = JSON.parse(localStorage.getItem("userLogs") || "[]");
+    logs.push({
+      name,
+      level: grade,
+      date: new Date().toLocaleString("th-TH")
+    });
+    localStorage.setItem("userLogs", JSON.stringify(logs));
 
-    
-  </script>
+    successMsg.style.display = "block";
+    sound.play();
 
+    setTimeout(() => {
+      const fileMap = {
+        "ป.1": "p1.html",
+        "ป.2": "p2.html",
+        "ป.3": "p3.html",
+        "ป.4": "p4.html",
+        "ป.5": "p5.html",
+        "ป.6": "p6.html",
+        "อนุบาล 1": "kid1-3.html",
+        "อนุบาล 2": "kid1-3.html",
+        "อนุบาล 3": "kid1-3.html"
+      };
+      window.location.href = fileMap[grade] || "index.html";
+    }, 1500);
+  }
+</script>
 
-
-
-<button class="teacher-login-btn" onclick="window.location.href='teacher-login.html'">
-  👩‍🏫 เข้าสู่ระบบครู
-</button>
-
-
-
+  <button class="teacher-login-btn" onclick="window.location.href='teacher-login.html'">
+    👩‍🏫 เข้าสู่ระบบครู
+  </button>
 </body>
 </html>
