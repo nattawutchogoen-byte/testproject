@@ -2,27 +2,33 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>สมัครสมาชิกนักเรียน</title>
   <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
       font-family: 'Itim', cursive;
       background: linear-gradient(180deg, #FFE6E6, #FFF7CC);
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      margin: 0;
+      min-height: 100vh;
+      padding: 20px;
     }
 
     .container {
+      width: 100%;
+      max-width: 600px;
       background: #fff;
-      padding: 40px 50px;
       border-radius: 30px;
       box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-      text-align: center;
-      max-width: 400px;
-      width: 90%;
+      overflow: hidden;
       animation: popIn 0.6s ease;
     }
 
@@ -31,14 +37,24 @@
       to { transform: scale(1); opacity: 1; }
     }
 
-    h1 {
-      color: #FF6B6B;
-      font-size: 2rem;
-      margin-bottom: 10px;
+    .header {
+      background: linear-gradient(135deg, #FF6B6B, #FF92A5);
+      padding: 30px 20px;
+      text-align: center;
+      color: white;
     }
 
-    h1::after {
-      content: " 🎓";
+    .header h1 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .header h1::after {
+      content: "🎓";
       animation: float 2s infinite ease-in-out;
       display: inline-block;
     }
@@ -48,71 +64,18 @@
       50% { transform: translateY(-6px); }
     }
 
-    input, select {
+    .form-wrapper {
+      padding: 30px 20px;
+      max-height: 70vh;
+      overflow-y: auto;
+    }
+
+    /* Google Form Embed Styling */
+    .form-wrapper iframe {
       width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border: 2px solid #FFD166;
-      border-radius: 20px;
-      font-size: 1rem;
-      outline: none;
-      transition: all 0.2s;
-      background-color: #fff9e6;
-      box-sizing: border-box;
-    }
-
-    input:focus, select:focus {
-      border-color: #FF6B6B;
-      background-color: #fff3f3;
-    }
-
-    button {
-      background-color: #FF92A5;
-      color: white;
+      height: auto;
       border: none;
-      border-radius: 25px;
-      padding: 12px 30px;
-      font-size: 1.1rem;
-      cursor: pointer;
-      transition: 0.3s;
-      margin-top: 10px;
-      box-shadow: 0 4px 8px rgba(255,105,135,0.3);
-    }
-
-    button:hover {
-      background-color: #FF6B6B;
-      transform: translateY(-3px);
-    }
-
-    button:active {
-      transform: translateY(0);
-    }
-
-    button:disabled {
-      background-color: #ccc;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    .success {
-      display: none;
-      font-size: 1.2rem;
-      color: #4CAF50;
-      margin-top: 15px;
-      animation: bounce 1s ease;
-    }
-
-    .error {
-      display: none;
-      font-size: 1rem;
-      color: #FF6B6B;
-      margin-top: 15px;
-      animation: bounce 1s ease;
-    }
-
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
+      border-radius: 10px;
     }
 
     .teacher-login-btn {
@@ -140,163 +103,58 @@
     }
 
     @media (max-width: 600px) {
+      .header h1 {
+        font-size: 1.5rem;
+      }
+
+      .form-wrapper {
+        padding: 20px 15px;
+      }
+
       .teacher-login-btn {
         display: none;
       }
+    }
+
+    /* ซ่อน scrollbar ของ iframe */
+    .form-wrapper iframe {
+      scrolling: no;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>สมัครสมาชิกนักเรียน</h1>
+    <div class="header">
+      <h1>สมัครสมาชิกนักเรียน</h1>
+      <p>กรุณากรอกข้อมูลของคุณให้ครบถ้วน</p>
+    </div>
 
-    <input type="text" id="name" placeholder="กรอกชื่อ - นามสกุล">
-
-    <label for="level">เลือกระดับชั้น 🏫</label>
-    <select id="level" onchange="updateGradeOptions()">
-      <option value="">-- เลือกระดับชั้น --</option>
-      <option value="อนุบาล">อนุบาล</option>
-      <option value="ประถม">ประถม</option>
-    </select>
-
-    <select id="grade">
-      <option value="">-- เลือกชั้นเรียน --</option>
-    </select>
-
-    <button id="registerBtn" onclick="register()">สมัครเลย!</button>
-    <p class="success" id="successMsg">🎉 สมัครสำเร็จ</p>
-    <p class="error" id="errorMsg" style="display: none;"></p>
+    <div class="form-wrapper">
+      <!-- Google Form Embed -->
+      <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSciu4mYaDEaAiOJ3HUpCuRu_yp8RqesYpw676hzaA1Fx_l2Ow/viewform?embedded=true" width="100%" height="800" frameborder="0" marginheight="0" marginwidth="0">
+        กำลังโหลดแบบฟอร์ม...
+      </iframe>
+    </div>
   </div>
-
-  <audio id="successSound" src="https://cdn.pixabay.com/download/audio/2023/03/21/audio_cbf29a319e.mp3?filename=correct-answer-3-126467.mp3"></audio>
-
-  <script>
-  // ⚠️ แทนที่ URL นี้ด้วย URL ของ Google Apps Script ของคุณ
-  const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby-_E_wMa4wQoxuIB3QWGKngkaB2th3SJ2me1KZGMZer848LkABwBOe5K35kzvj6UW1Jg/exec";
-
-  function updateGradeOptions() {
-    const level = document.getElementById("level").value;
-    const grade = document.getElementById("grade");
-    grade.innerHTML = '<option value="">-- เลือกชั้นเรียน --</option>';
-
-    if (level === "อนุบาล") {
-      ["อนุบาล 1", "อนุบาล 2", "อนุบาล 3"].forEach(lv => {
-        const opt = document.createElement("option");
-        opt.value = lv;
-        opt.textContent = lv;
-        grade.appendChild(opt);
-      });
-    } else if (level === "ประถม") {
-      ["ป.1", "ป.2", "ป.3", "ป.4", "ป.5", "ป.6"].forEach(lv => {
-        const opt = document.createElement("option");
-        opt.value = lv;
-        opt.textContent = lv;
-        grade.appendChild(opt);
-      });
-    }
-  }
-
-  /**
-   * ฟังก์ชันสำหรับส่งข้อมูลไปยัง Google Sheet
-   */
-  async function sendToGoogleSheet(data) {
-    try {
-      const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-
-      const result = await response.json();
-      return result;
-    } catch (error) {
-      console.error('เกิดข้อผิดพลาดในการส่งข้อมูล:', error);
-      return {
-        status: "error",
-        message: "ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้"
-      };
-    }
-  }
-
-  /**
-   * ฟังก์ชันหลักสำหรับการสมัคร
-   */
-  async function register() {
-    const name = document.getElementById("name").value.trim();
-    const level = document.getElementById("level").value;
-    const grade = document.getElementById("grade").value;
-    const successMsg = document.getElementById("successMsg");
-    const errorMsg = document.getElementById("errorMsg");
-    const registerBtn = document.getElementById("registerBtn");
-    const sound = document.getElementById("successSound");
-
-    // ซ่อนข้อความเก่า
-    successMsg.style.display = "none";
-    errorMsg.style.display = "none";
-
-    // ตรวจสอบข้อมูล
-    if (!name || !level || !grade) {
-      errorMsg.textContent = "❌ กรุณากรอกข้อมูลให้ครบถ้วนก่อนสมัคร";
-      errorMsg.style.display = "block";
-      return;
-    }
-
-    // ปิดปุ่มเพื่อป้องกันการคลิกซ้ำ
-    registerBtn.disabled = true;
-    registerBtn.textContent = "กำลังสมัคร...";
-
-    // เตรียมข้อมูลที่จะส่ง
-    const registrationData = {
-      name: name,
-      level: grade,
-      date: new Date().toLocaleString("th-TH"),
-      ipAddress: "ติดตามจากอุปกรณ์" // สามารถเพิ่มการติดตาม IP ได้ในภายหลัง
-    };
-
-    // ส่งข้อมูลไปยัง Google Sheet
-    const result = await sendToGoogleSheet(registrationData);
-
-    if (result.status === "success") {
-      // บันทึกข้อมูลใน localStorage ด้วย (สำรองข้อมูลท้องถิ่น)
-      const logs = JSON.parse(localStorage.getItem("userLogs") || "[]");
-      logs.push(registrationData);
-      localStorage.setItem("userLogs", JSON.stringify(logs));
-
-      // แสดงข้อความสำเร็จ
-      successMsg.style.display = "block";
-      sound.play();
-
-      // นำไปยังหน้าถัดไป
-      setTimeout(() => {
-        const fileMap = {
-          "ป.1": "p1.html",
-          "ป.2": "p2.html",
-          "ป.3": "p3.html",
-          "ป.4": "p4.html",
-          "ป.5": "p5.html",
-          "ป.6": "p6.html",
-          "อนุบาล 1": "kid1-3.html",
-          "อนุบาล 2": "kid1-3.html",
-          "อนุบาล 3": "kid1-3.html"
-        };
-        window.location.href = fileMap[grade] || "index.html";
-      }, 1500);
-    } else {
-      // แสดงข้อความข้อผิดพลาด
-      errorMsg.textContent = "❌ " + (result.message || "เกิดข้อผิดพลาดในการสมัคร");
-      errorMsg.style.display = "block";
-
-      // เปิดปุ่มใหม่
-      registerBtn.disabled = false;
-      registerBtn.textContent = "สมัครเลย!";
-    }
-  }
-  </script>
 
   <button class="teacher-login-btn" onclick="window.location.href='teacher-login.html'">
     👩‍🏫 เข้าสู่ระบบครู
   </button>
+
+  <script>
+    // ปรับขนาด iframe ให้เหมาะสม
+    window.addEventListener('message', function(e) {
+      if (e.origin !== 'https://docs.google.com') return;
+      
+      const iframe = document.querySelector('.form-wrapper iframe');
+      if (iframe && e.data[0] === 'setHeight') {
+        iframe.style.height = (e.data[1] + 100) + 'px';
+      }
+    });
+
+    // บันทึกข้อมูลใน localStorage เพื่อสำรองข้อมูล
+    console.log('📝 แบบฟอร์มสมัครนักเรียนพร้อมใช้งาน');
+    console.log('✅ ข้อมูลจะถูกบันทึกไปยัง Google Sheet โดยอัตโนมัติ');
+  </script>
 </body>
 </html>
