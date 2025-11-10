@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="th">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ผลลัพธ์แบบฝึกหัด</title>
+  <title>ผลสรุปแบบฝึกหัด</title>
   <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
   <style>
     * {
@@ -15,112 +14,109 @@
 
     body {
       font-family: 'Itim', cursive;
-      background: linear-gradient(135deg, #FFD1DC, #FFB6C1); /* Light Pink/Rose background */
+      background: linear-gradient(135deg, #F0F8FF, #E6E6FA);
       min-height: 100vh;
+      padding: 20px;
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 20px;
     }
 
     .container {
       max-width: 600px;
-      width: 100%;
+      width: 90%;
       background: white;
       padding: 40px;
       border-radius: 20px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.15);
       text-align: center;
     }
 
     .header {
-      color: #FF1493;
+      background: linear-gradient(135deg, #4CAF50, #8BC34A); /* Green theme for success */
+      color: white;
+      padding: 20px;
+      border-radius: 15px;
       margin-bottom: 30px;
     }
 
     .header h1 {
-      font-size: 3rem;
+      font-size: 2.5rem;
       margin-bottom: 10px;
     }
 
     .score-display {
       font-size: 4rem;
+      color: #4CAF50;
       font-weight: bold;
-      color: #FF69B4;
-      margin-bottom: 20px;
-      padding: 20px;
-      border: 5px solid #FF69B4;
-      border-radius: 15px;
-      display: inline-block;
+      margin: 20px 0;
     }
 
     .message {
       font-size: 1.5rem;
       color: #333;
-      margin-bottom: 40px;
+      margin-bottom: 30px;
     }
 
-    .return-btn {
+    .back-button {
       display: inline-block;
-      padding: 15px 30px;
-      background-color: #FF69B4;
+      padding: 12px 25px;
+      background-color: #FF9800; /* Orange for action */
       color: white;
       text-decoration: none;
-      border: none;
       border-radius: 10px;
       font-size: 1.2rem;
       cursor: pointer;
-      transition: background-color 0.3s, transform 0.1s;
+      transition: background-color 0.3s;
     }
 
-    .return-btn:hover {
-      background-color: #FF1493;
-      transform: translateY(-2px);
+    .back-button:hover {
+      background-color: #FB8C00;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
-      <h1>ผลลัพธ์แบบฝึกหัด</h1>
+      <h1>ผลสรุปแบบฝึกหัด</h1>
     </div>
 
-    <div id="scoreDisplay" class="score-display">--/10</div>
-    <div id="message" class="message"></div>
-
-    <a href="kid1-3.html" class="return-btn">กลับหน้าหลักอนุบาล</a>
+    <div class="message" id="message">กำลังโหลดผลลัพธ์...</div>
+    <div class="score-display" id="scoreDisplay">--/10</div>
+    
+    <a href="kid1-3.html" class="back-button">กลับไปหน้าหลัก</a>
   </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const score = urlParams.get('score');
-      const total = urlParams.get('total') || 10;
-      const subject = urlParams.get('subject') || 'แบบฝึกหัด';
+      const score = localStorage.getItem('quizScore');
+      const totalQuestions = 10; // Assume 10 questions for all quizzes
 
       const scoreDisplay = document.getElementById('scoreDisplay');
       const messageElement = document.getElementById('message');
-      const returnBtn = document.querySelector('.return-btn');
 
-      scoreDisplay.textContent = `${score}/${total}`;
+      if (score !== null) {
+        const scoreInt = parseInt(score, 10);
+        scoreDisplay.textContent = `${scoreInt}/${totalQuestions}`;
 
-      let message = `คุณทำแบบฝึกหัดวิชา ${subject} ได้ ${score} ข้อ จากทั้งหมด ${total} ข้อ`;
-      
-      if (score == total) {
-        message += ' - ยอดเยี่ยมมาก! เก่งที่สุดเลย!';
-        scoreDisplay.style.borderColor = '#3CB371'; // Green
-        scoreDisplay.style.color = '#3CB371';
-      } else if (score >= total / 2) {
-        message += ' - เก่งมาก! พยายามอีกนิดเดียว!';
+        let message = '';
+        if (scoreInt === totalQuestions) {
+          message = 'ยอดเยี่ยมมาก! คุณทำถูกทุกข้อเลย!';
+        } else if (scoreInt >= totalQuestions * 0.7) {
+          message = 'ดีมาก! คุณทำได้ดีเยี่ยม';
+        } else if (scoreInt >= totalQuestions * 0.5) {
+          message = 'ทำได้ดี! ลองทบทวนอีกครั้งนะ';
+        } else {
+          message = 'ไม่เป็นไร! ลองพยายามอีกครั้ง';
+        }
+        messageElement.textContent = message;
+
+        // Clear the score from Local Storage after displaying
+        localStorage.removeItem('quizScore');
       } else {
-        message += ' - ไม่เป็นไรนะ! ลองทบทวนแล้วกลับมาทำใหม่!';
-        scoreDisplay.style.borderColor = '#FF4500'; // Orange-Red
-        scoreDisplay.style.color = '#FF4500';
+        scoreDisplay.textContent = 'ไม่พบข้อมูล';
+        messageElement.textContent = 'ไม่พบผลลัพธ์ของแบบฝึกหัด กรุณาลองทำแบบฝึกหัดใหม่อีกครั้ง';
       }
-
-      messageElement.textContent = message;
-      
-      // The return button already links to kid1-3.html
     });
   </script>
 </body>

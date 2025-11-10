@@ -118,6 +118,8 @@
   </div>
 
   
+  
+  
   <script>
     const QUIZ_DATA = [
         {"q": "ใครคือสมาชิกในครอบครัวของเรา?", "options": ["เพื่อน", "คุณครู", "พ่อแม่", "ตำรวจ"], "answer": "พ่อแม่"},
@@ -138,7 +140,7 @@
       const questionsContainer = document.createElement('div');
       quizForm.insertBefore(questionsContainer, submitBtn);
 
-      // Function to render the quiz questions
+            // Function to render the quiz questions
       function renderQuiz() {
         let html = '';
         QUIZ_DATA.forEach((qData, index) => {
@@ -163,32 +165,30 @@
         questionsContainer.innerHTML = html;
       }
 
-      // Function to check answers (redirect logic)
+      // Function to check answers and show inline feedback
       function checkAnswers(e) {
         e.preventDefault();
-        
         let score = 0;
-        let totalQuestions = QUIZ_DATA.length;
-        let subject = document.querySelector('.header h1').textContent.replace('แบบฝึกหัด', '').trim();
-
+        
         QUIZ_DATA.forEach((qData, index) => {
           const qNum = index + 1;
-          const selectedOption = quizForm.querySelector(`input[name="q${qNum}"]:checked`);
+          const selectedOption = document.querySelector(`input[name="q${qNum}"]:checked`);
           
           if (selectedOption && selectedOption.value === qData.answer) {
             score++;
           }
         });
 
-        // Redirect to result.html with score, total, and subject as URL parameters
-        window.location.href = `result.html?score=${score}&total=${totalQuestions}&subject=${subject}`;
+        // Save score to Local Storage
+        localStorage.setItem('quizScore', score);
+
+        // Redirect to result page
+        window.location.href = 'result.html';
       }
 
       // Initial render and event listener setup
       renderQuiz();
       quizForm.addEventListener('submit', checkAnswers);
     });
-  </script>
-
-</body>
+  </script></body>
 </html>
