@@ -5,7 +5,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>แบบฝึกหัดพลศึกษา อนุบาล</title>
-  <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -14,8 +13,7 @@
     }
 
     body {
-      font-family: 'Itim', cursive;
-      background: linear-gradient(135deg, #F0F8FF, #E6E6FA); /* Light, neutral background */
+      background: linear-gradient(135deg, #F0F8FF, #E6E6FA);
       min-height: 100vh;
       padding: 20px;
     }
@@ -30,7 +28,6 @@
     }
 
     .header {
-      /* Kindergarten color scheme */
       background: linear-gradient(135deg, #FF69B4, #FF1493);
       color: white;
       padding: 20px;
@@ -54,7 +51,7 @@
     }
 
     .question-card {
-      background: #FFF0F5; /* Light pink for kindergarten theme */
+      background: #FFF0F5;
       padding: 20px;
       border-radius: 10px;
       margin-bottom: 15px;
@@ -99,48 +96,254 @@
       background-color: #FF1493;
     }
 
-    
+    .result-section {
+      display: none;
+    }
+
+    .result-section.active {
+      display: block;
+    }
+
+    .score-card {
+      background: linear-gradient(135deg, #FFD700, #FFA500);
+      color: white;
+      padding: 30px;
+      border-radius: 15px;
+      text-align: center;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    .score-card h2 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+
+    .score-card p {
+      font-size: 1.3rem;
+    }
+
+    .answer-card {
+      background: #FFF0F5;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .answer-card.correct {
+      border-left: 5px solid #28a745;
+      background: #d4edda;
+    }
+
+    .answer-card.incorrect {
+      border-left: 5px solid #dc3545;
+      background: #f8d7da;
+    }
+
+    .answer-card h4 {
+      color: #FF1493;
+      margin-bottom: 10px;
+      font-size: 1.2rem;
+    }
+
+    .answer-info {
+      margin-top: 10px;
+      padding: 10px;
+      background: white;
+      border-radius: 5px;
+    }
+
+    .answer-info p {
+      margin: 5px 0;
+      font-size: 1rem;
+    }
+
+    .correct-answer {
+      color: #28a745;
+      font-weight: bold;
+    }
+
+    .wrong-answer {
+      color: #dc3545;
+      font-weight: bold;
+    }
+
+    .explanation {
+      margin-top: 10px;
+      padding: 10px;
+      border-top: 1px solid #ccc;
+      font-style: italic;
+      color: #333;
+    }
+
+    .back-btn {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      background-color: #6c757d;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin-top: 20px;
+      text-decoration: none;
+      text-align: center;
+    }
+
+    .back-btn:hover {
+      background-color: #5a6268;
+    }
   </style>
+    <link rel="stylesheet" href="sarabun_font.css">
 </head>
 <body>
   <div class="container">
     <div class="header">
-      <h1>แบบฝึกหัดพลศึกษา</h1>
+      <h1>แบบฝึกหัดพลศึกษา อนุบาล</h1>
       <p>ชั้นอนุบาล - จำนวน 10 ข้อ</p>
     </div>
 
-    <form id="quizForm">
-      <!-- Questions will be rendered here by JavaScript -->
-      <button type="submit" class="submit-btn">ส่งคำตอบ</button>
-    </form>
+    <div id="quizSection" class="quiz-section">
+      <form id="quizForm">
+        <button type="submit" class="submit-btn" id="submitBtn" disabled>ส่งคำตอบ</button>
+      </form>
+    </div>
 
-    
+    <div id="resultSection" class="result-section">
+      <div class="score-card">
+        <h2>คะแนนของคุณ</h2>
+        <p id="scoreText">0/10</p>
+      </div>
+      <div id="answersContainer"></div>
+      <a href="kid1-3.html" class="back-btn">กลับหน้าหลัก</a>
+    </div>
   </div>
 
-  
-  
-  
   <script>
     const QUIZ_DATA = [
-        {"q": "การวิ่งใช้ส่วนใดของร่างกาย?", "options": ["มือ", "เท้า", "ศีรษะ", "ไหล่"], "answer": "เท้า"},
-        {"q": "การกระโดดเชือกช่วยให้ร่างกายแข็งแรงในส่วนใด?", "options": ["แขน", "ขา", "นิ้วมือ", "หู"], "answer": "ขา"},
-        {"q": "ก่อนออกกำลังกายควรทำอะไร?", "options": ["กินขนม", "นอนหลับ", "อบอุ่นร่างกาย", "ดูทีวี"], "answer": "อบอุ่นร่างกาย"},
-        {"q": "กีฬาใดที่ใช้ลูกบอลกลมๆ?", "options": ["วิ่ง", "ว่ายน้ำ", "ฟุตบอล", "กระโดด"], "answer": "ฟุตบอล"},
-        {"q": "การว่ายน้ำใช้ส่วนใดของร่างกายมากที่สุด?", "options": ["ปาก", "ตา", "แขนและขา", "หู"], "answer": "แขนและขา"},
-        {"q": "การเล่นซ่อนหาเป็นการออกกำลังกายแบบใด?", "options": ["อยู่กับที่", "เคลื่อนไหว", "นั่งเฉยๆ", "นอน"], "answer": "เคลื่อนไหว"},
-        {"q": "การทรงตัวที่ดีช่วยให้เราทำอะไรได้?", "options": ["ล้มง่าย", "เดินตรง", "วิ่งเร็ว", "กินเยอะ"], "answer": "เดินตรง"},
-        {"q": "การเตะบอลใช้ส่วนใดของร่างกาย?", "options": ["มือ", "เท้า", "ศีรษะ", "ไหล่"], "answer": "เท้า"},
-        {"q": "การหายใจที่ถูกต้องขณะออกกำลังกายคือ?", "options": ["กลั้นหายใจ", "หายใจเข้า-ออกสม่ำเสมอ", "หายใจเร็วๆ", "หายใจทางปาก"], "answer": "หายใจเข้า-ออกสม่ำเสมอ"},
-        {"q": "หลังออกกำลังกายเสร็จควรทำอะไร?", "options": ["ดื่มน้ำเย็นจัด", "พักผ่อน", "วิ่งต่อ", "กินอาหารหนัก"], "answer": "พักผ่อน"}
-    ];
+    {
+        "q": "การวิ่งใช้ส่วนใดของร่างกาย?",
+        "options": [
+            "มือ",
+            "เท้า",
+            "ศีรษะ",
+            "ไหล่"
+        ],
+        "answer": "เท้า",
+        "explanation": "คำตอบที่ถูกต้องคือ 'เท้า'"
+    },
+    {
+        "q": "การกระโดดเชือกช่วยให้ร่างกายแข็งแรงในส่วนใด?",
+        "options": [
+            "แขน",
+            "ขา",
+            "นิ้วมือ",
+            "หู"
+        ],
+        "answer": "ขา",
+        "explanation": "คำตอบที่ถูกต้องคือ 'ขา'"
+    },
+    {
+        "q": "ก่อนออกกำลังกายควรทำอะไร?",
+        "options": [
+            "กินขนม",
+            "นอนหลับ",
+            "อบอุ่นร่างกาย",
+            "ดูทีวี"
+        ],
+        "answer": "อบอุ่นร่างกาย",
+        "explanation": "คำตอบที่ถูกต้องคือ 'อบอุ่นร่างกาย' ซึ่งเป็นกิจกรรมหรืออุปกรณ์ที่ใช้ในการออกกำลังกายและพลศึกษา"
+    },
+    {
+        "q": "กีฬาใดที่ใช้ลูกบอลกลมๆ?",
+        "options": [
+            "วิ่ง",
+            "ว่ายน้ำ",
+            "ฟุตบอล",
+            "กระโดด"
+        ],
+        "answer": "ฟุตบอล",
+        "explanation": "คำตอบที่ถูกต้องคือ 'ฟุตบอล' ซึ่งเป็นกิจกรรมหรืออุปกรณ์ที่ใช้ในการออกกำลังกายและพลศึกษา"
+    },
+    {
+        "q": "การว่ายน้ำใช้ส่วนใดของร่างกายมากที่สุด?",
+        "options": [
+            "ปาก",
+            "ตา",
+            "แขนและขา",
+            "หู"
+        ],
+        "answer": "แขนและขา",
+        "explanation": "คำตอบที่ถูกต้องคือ 'แขนและขา'"
+    },
+    {
+        "q": "การเล่นซ่อนหาเป็นการออกกำลังกายแบบใด?",
+        "options": [
+            "อยู่กับที่",
+            "เคลื่อนไหว",
+            "นั่งเฉยๆ",
+            "นอน"
+        ],
+        "answer": "เคลื่อนไหว",
+        "explanation": "คำตอบที่ถูกต้องคือ 'เคลื่อนไหว' ซึ่งเป็นกิจกรรมหรืออุปกรณ์ที่ใช้ในการออกกำลังกายและพลศึกษา"
+    },
+    {
+        "q": "การทรงตัวที่ดีช่วยให้เราทำอะไรได้?",
+        "options": [
+            "ล้มง่าย",
+            "เดินตรง",
+            "วิ่งเร็ว",
+            "กินเยอะ"
+        ],
+        "answer": "เดินตรง",
+        "explanation": "คำตอบที่ถูกต้องคือ 'เดินตรง'"
+    },
+    {
+        "q": "การเตะบอลใช้ส่วนใดของร่างกาย?",
+        "options": [
+            "มือ",
+            "เท้า",
+            "ศีรษะ",
+            "ไหล่"
+        ],
+        "answer": "เท้า",
+        "explanation": "คำตอบที่ถูกต้องคือ 'เท้า'"
+    },
+    {
+        "q": "การหายใจที่ถูกต้องขณะออกกำลังกายคือ?",
+        "options": [
+            "กลั้นหายใจ",
+            "หายใจเข้า-ออกสม่ำเสมอ",
+            "หายใจเร็วๆ",
+            "หายใจทางปาก"
+        ],
+        "answer": "หายใจเข้า-ออกสม่ำเสมอ",
+        "explanation": "คำตอบที่ถูกต้องคือ 'หายใจเข้า-ออกสม่ำเสมอ' ซึ่งเป็นกิจกรรมหรืออุปกรณ์ที่ใช้ในการออกกำลังกายและพลศึกษา"
+    },
+    {
+        "q": "หลังออกกำลังกายเสร็จควรทำอะไร?",
+        "options": [
+            "ดื่มน้ำเย็นจัด",
+            "พักผ่อน",
+            "วิ่งต่อ",
+            "กินอาหารหนัก"
+        ],
+        "answer": "พักผ่อน",
+        "explanation": "คำตอบที่ถูกต้องคือ 'พักผ่อน' ซึ่งเป็นกิจกรรมหรืออุปกรณ์ที่ใช้ในการออกกำลังกายและพลศึกษา"
+    }
+];
+
+    let userAnswers = {};
 
     document.addEventListener('DOMContentLoaded', () => {
       const quizForm = document.getElementById('quizForm');
-      const submitBtn = quizForm.querySelector('.submit-btn');
+      const submitBtn = document.getElementById('submitBtn');
       const questionsContainer = document.createElement('div');
       quizForm.insertBefore(questionsContainer, submitBtn);
 
-            // Function to render the quiz questions
       function renderQuiz() {
         let html = '';
         QUIZ_DATA.forEach((qData, index) => {
@@ -163,32 +366,68 @@
         });
         
         questionsContainer.innerHTML = html;
+        questionsContainer.addEventListener('change', checkCompletion);
       }
 
-      // Function to check answers and show inline feedback
+      function checkCompletion() {
+        const answeredCount = document.querySelectorAll('input[type="radio"]:checked').length;
+        submitBtn.disabled = answeredCount !== QUIZ_DATA.length;
+      }
+
       function checkAnswers(e) {
         e.preventDefault();
         let score = 0;
+        userAnswers = {};
         
         QUIZ_DATA.forEach((qData, index) => {
           const qNum = index + 1;
           const selectedOption = document.querySelector(`input[name="q${qNum}"]:checked`);
+          const userAnswer = selectedOption ? selectedOption.value : null;
+          userAnswers[qNum] = userAnswer;
           
-          if (selectedOption && selectedOption.value === qData.answer) {
+          if (userAnswer === qData.answer) {
             score++;
           }
         });
 
-        // Save score to Local Storage
-        localStorage.setItem('quizScore', score);
-
-        // Redirect to result page
-        window.location.href = 'result.html';
+        showResults(score);
       }
 
-      // Initial render and event listener setup
+      function showResults(score) {
+        document.getElementById('quizSection').style.display = 'none';
+        document.getElementById('resultSection').classList.add('active');
+        document.getElementById('scoreText').textContent = `${score}/${QUIZ_DATA.length}`;
+
+        const answersContainer = document.getElementById('answersContainer');
+        let html = '';
+
+        QUIZ_DATA.forEach((qData, index) => {
+          const qNum = index + 1;
+          const userAnswer = userAnswers[qNum];
+          const isCorrect = userAnswer === qData.answer;
+          const cardClass = isCorrect ? 'correct' : 'incorrect';
+
+          html += `
+            <div class="answer-card ${cardClass}">
+              <h4>ข้อ ${qNum}: ${qData.q}</h4>
+              <div class="answer-info">
+                ${userAnswer ? `<p>คำตอบของคุณ: <span class="${isCorrect ? 'correct-answer' : 'wrong-answer'}">${userAnswer}</span></p>` : '<p>คุณไม่ได้ตอบข้อนี้</p>'}
+                ${!isCorrect ? `<p>เฉลย: <span class="correct-answer">${qData.answer}</span></p>` : '<p>✓ ถูกต้อง!</p>'}
+              </div>
+              <div class="explanation">
+                คำอธิบาย: ${qData.explanation}
+              </div>
+            </div>
+          `;
+        });
+
+        answersContainer.innerHTML = html;
+      }
+
       renderQuiz();
+      checkCompletion(); // Initial check to disable the button
       quizForm.addEventListener('submit', checkAnswers);
     });
-  </script></body>
+  </script>
+</body>
 </html>

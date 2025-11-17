@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>เข้าสู่ระบบนักเรียน</title>
+  <style>
+    /* ... (CSS ของคุณเหมือนเดิมทั้งหมด) ... */
+    body {
+      background: linear-gradient(180deg, #FFE6E6, #FFF7CC);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      background: #fff;
+      padding: 40px 50px;
+      border-radius: 30px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+      animation: popIn 0.6s ease;
+    }
+    @keyframes popIn {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    h1 {
+      color: #FF6B6B;
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+    h1::after {
+      content: " 🎓";
+      animation: float 2s infinite ease-in-out;
+      display: inline-block;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    label {
+      display: block;
+      text-align: left;
+      color: #666;
+      font-size: 0.95rem;
+      margin-top: 15px;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    input, select {
+      width: 100%;
+      padding: 12px;
+      margin: 5px 0 10px 0;
+      border: 2px solid #FFD166;
+      border-radius: 20px;
+      font-size: 1rem;
+      outline: none;
+      transition: all 0.2s;
+      background-color: #fff9e6;
+      box-sizing: border-box;
+    }
+    input:focus, select:focus {
+      border-color: #FF6B6B;
+      background-color: #fff3f3;
+    }
+    button {
+      background-color: #FF92A5;
+      color: white;
+      border: none;
+      border-radius: 25px;
+      padding: 12px 30px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-top: 20px;
+      box-shadow: 0 4px 8px rgba(255,105,135,0.3);
+    }
+    #registerBtn {
+      width: 100%;
+    }
+    button:hover {
+      background-color: #FF6B6B;
+      transform: translateY(-3px);
+    }
+    button:active {
+      transform: translateY(0);
+    }
+    button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .success {
+      display: none;
+      font-size: 1.2rem;
+      color: #4CAF50;
+      margin-top: 15px;
+      animation: bounce 1s ease;
+    }
+    .error {
+      display: none;
+      font-size: 1rem;
+      color: #FF6B6B;
+      margin-top: 15px;
+      animation: bounce 1s ease;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+  </style>
+  <link rel="stylesheet" href="sarabun_font.css">
+</head>
+<body>
+  <div class="container">
+    <h1>เข้าสู่ระบบนักเรียน</h1>
+    <input type="text" id="name" placeholder="กรอกชื่อ - นามสกุล">
+    <label for="level">เลือกระดับชั้น 🏫</label>
+    <select id="level" onchange="updateGradeOptions()">
+      <option value="">-- เลือกระดับชั้น --</option>
+      <option value="อนุบาล">อนุบาล</option>
+      <option value="ประถมศึกษา">ประถมศึกษา</option>
+    </select>
+    <label for="grade">เลือกชั้นเรียน 📚</label>
+    <select id="grade">
+      <option value="">-- เลือกชั้นเรียน --</option>
+    </select>
+    <button id="registerBtn" onclick="register()">กดเพื่อเข้าสู่ระบบ</button>
+    <p class="success" id="successMsg">🎉 เข้าสู่ระบบสำเร็จ</p>
+    <p class="error" id="errorMsg" style="display: none;"></p>
+  </div>
+  <audio id="successSound" src="https://cdn.pixabay.com/download/audio/2023/03/21/audio_cbf29a319e.mp3?filename=correct-answer-3-126467.mp3"></audio>
+
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+
+  <script>
+    // 2. ⭐️⭐️⭐️ วาง
+    // 2. ⭐️⭐️⭐️ วาง Config ของคุณตรงนี้ ⭐️⭐️⭐️
+   const firebaseConfig = {
+  apiKey: "AIzaSyCmcrlQZJAaPleSj55_vFbBbv0tv62orzc",
+  authDomain: "iq2gorealtime.firebaseapp.com",
+  projectId: "iq2gorealtime",
+  storageBucket: "iq2gorealtime.firebasestorage.app",
+  messagingSenderId: "53793671216",
+  appId: "1:53793671216:web:483d97128a9827458045f5",
+  measurementId: "G-GFWPB899WD"
+};
+    // ⭐️⭐️⭐️ ----------------------------- ⭐️⭐️⭐️
+
+    // 3. ⭐️ เริ่มต้น Firebase ⭐️
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore(); // นี่คือตัวเชื่อมต่อฐานข้อมูลของเรา
+
+    // ฟังก์ชัน updateGradeOptions() ของคุณ (เหมือนเดิม)
+    function updateGradeOptions() {
+      const level = document.getElementById("level").value;
+      const grade = document.getElementById("grade");
+      grade.innerHTML = '<option value="">-- เลือกชั้นเรียน --</option>';
+      if (level === "อนุบาล") {
+        ["อนุบาล 1", "อนุบาล 2", "อนุบาล 3"].forEach(lv => {
+          const opt = document.createElement("option");
+          opt.value = lv;
+          opt.textContent = lv;
+          grade.appendChild(opt);
+        });
+      } else if (level === "ประถมศึกษา") {
+        ["ป.1", "ป.2", "ป.3", "ป.4", "ป.5", "ป.6"].forEach(lv => {
+          const opt = document.createElement("option");
+          opt.value = lv;
+          opt.textContent = lv;
+          grade.appendChild(opt);
+        });
+      }
+    }
+
+    /**
+     * ฟังก์ชันหลักสำหรับการสมัคร (อัปเกรดแล้ว!)
+     */
+    async function register() {
+      const name = document.getElementById("name").value.trim();
+      const level = document.getElementById("level").value;
+      const grade = document.getElementById("grade").value;
+      const successMsg = document.getElementById("successMsg");
+      const errorMsg = document.getElementById("errorMsg");
+      const registerBtn = document.getElementById("registerBtn");
+      const sound = document.getElementById("successSound");
+
+      successMsg.style.display = "none";
+      errorMsg.style.display = "none";
+
+      if (!name || !level || !grade) {
+        errorMsg.textContent = "❌ กรุณากรอกข้อมูลให้ครบถ้วนก่อนเข้าสู่ระบบ";
+        errorMsg.style.display = "block";
+        return;
+      }
+
+      registerBtn.disabled = true;
+      registerBtn.textContent = "กำลังเข้าสู่ระบบ...";
+
+      const registrationData = {
+        name: name,
+        level: level,
+        grade: grade,
+        date: new Date().toLocaleString("th-TH")
+      };
+
+      try {
+        // --- 4. ⭐️ นี่คือส่วนที่เพิ่มเข้ามา ⭐️ ---
+        // ส่งข้อมูลไปเก็บที่ Firebase
+        await db.collection("students").add({
+          ...registrationData,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp() // เพื่อเรียงลำดับ
+        });
+        // ------------------------------------
+
+        // --- โค้ดเดิมของคุณ (ทำงานเหมือนเดิม) ---
+        // บันทึกข้อมูลใน localStorage (สำหรับ userLogs)
+        const logs = JSON.parse(localStorage.getItem("userLogs") || "[]");
+        logs.push(registrationData);
+        localStorage.setItem("userLogs", JSON.stringify(logs));
+
+        // เก็บข้อมูลปัจจุบันเพื่อแสดงในหน้า success
+        localStorage.setItem("currentRegistration", JSON.stringify(registrationData));
+
+        // แสดงข้อความสำเร็จ
+        successMsg.style.display = "block";
+        sound.play();
+
+        // กำหนดหน้าที่จะนำไป (โค้ดเดิมของคุณ)
+        let nextPage = "";
+        if (grade.startsWith("อนุบาล")) {
+          nextPage = "kid1-3.html";
+        } else if (grade.startsWith("ป.")) {
+          const gradeNum = grade.replace("ป.", "");
+          nextPage = `p${gradeNum}.html`;
+        } else {
+          nextPage = "index.html";
+        }
+
+        // นำไปยังหน้าแบบฝึกหัด
+        setTimeout(() => {
+          window.location.href = nextPage;
+        }, 1500);
+        // --- จบส่วนโค้ดเดิม ---
+
+      } catch (error) {
+        // ถ้า Firebase ล้มเหลว
+        console.error("Error adding document: ", error);
+        errorMsg.textContent = "❌ เกิดข้อผิดพลาดในการเชื่อมต่อฐานข้อมูล";
+        errorMsg.style.display = "block";
+        registerBtn.disabled = false;
+        registerBtn.textContent = "กดเพื่อเข้าสู่ระบบ";
+      }
+    }
+  </script>
+
+</body>
+</html>

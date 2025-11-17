@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ผลสรุปแบบฝึกหัด</title>
-  <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -13,7 +12,6 @@
     }
 
     body {
-      font-family: 'Itim', cursive;
       background: linear-gradient(135deg, #F0F8FF, #E6E6FA);
       min-height: 100vh;
       padding: 20px;
@@ -33,7 +31,7 @@
     }
 
     .header {
-      background: linear-gradient(135deg, #4CAF50, #8BC34A); /* Green theme for success */
+      background: linear-gradient(135deg, #4CAF50, #8BC34A); 
       color: white;
       padding: 20px;
       border-radius: 15px;
@@ -61,7 +59,7 @@
     .back-button {
       display: inline-block;
       padding: 12px 25px;
-      background-color: #FF9800; /* Orange for action */
+      background-color: #FF9800; 
       color: white;
       text-decoration: none;
       border-radius: 10px;
@@ -74,6 +72,7 @@
       background-color: #FB8C00;
     }
   </style>
+    <link rel="stylesheet" href="sarabun_font.css">
 </head>
 <body>
   <div class="container">
@@ -90,7 +89,7 @@
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const score = localStorage.getItem('quizScore');
-      const totalQuestions = 10; // Assume 10 questions for all quizzes
+      const totalQuestions = 10;
 
       const scoreDisplay = document.getElementById('scoreDisplay');
       const messageElement = document.getElementById('message');
@@ -111,7 +110,7 @@
         }
         messageElement.textContent = message;
 
-        // Clear the score from Local Storage after displaying
+      
         localStorage.removeItem('quizScore');
       } else {
         scoreDisplay.textContent = 'ไม่พบข้อมูล';

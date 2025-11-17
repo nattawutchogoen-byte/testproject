@@ -1,10 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="th">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>หน้าอนุบาล 1-3</title>
-  <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -13,16 +13,72 @@
     }
 
     body {
-      font-family: 'Itim', cursive;
       background: linear-gradient(135deg, #FFE5B4, #FFDAB9, #FFB6C1);
       min-height: 100vh;
       padding: 20px;
+      position: relative; /* สำคัญสำหรับลูกโป่ง */
+      overflow-x: hidden; /* ป้องกัน scrollbar แนวนอน */
     }
 
     .container {
       max-width: 1000px;
       margin: 0 auto;
+      position: relative; /* ให้เนื้อหาอยู่เหนือลูกโป่ง */
+      z-index: 10;
     }
+
+    /* --- Balloon Styles --- */
+    .balloon-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none; /* ไม่ให้ลูกโป่งขวางการคลิก */
+        overflow: hidden;
+        z-index: 1; /* ให้อยู่ด้านหลังเนื้อหา */
+    }
+
+    .balloon {
+        position: absolute;
+        width: 60px;
+        height: 80px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 30% 30%, #ffffff, #ff69b4); /* สีชมพู */
+        box-shadow: inset -5px -5px 5px rgba(0, 0, 0, 0.1);
+        opacity: 0.8;
+        animation: floatUp 10s infinite linear;
+    }
+
+    .balloon::before {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 2px;
+        height: 30px;
+        background-color: rgba(0, 0, 0, 0.2);
+    }
+
+    /* Keyframes for floating up and sideways drift */
+    @keyframes floatUp {
+        0% {
+            transform: translateY(100vh) translateX(0);
+            opacity: 0;
+        }
+        10% {
+            opacity: 1; /* เริ่มต้นให้เห็นชัด */
+        }
+        90% {
+            opacity: 1; /* ยังคงเห็นชัดจนเกือบสุด */
+        }
+        100% {
+            transform: translateY(-100vh) translateX(var(--drift));
+            opacity: 0; /* หายไปอย่างนุ่มนวล */
+        }
+    }
+    /* --- End Balloon Styles --- */
 
     .header {
       background: linear-gradient(135deg, #FF69B4, #FF1493);
@@ -163,7 +219,6 @@
       font-size: 1rem;
       cursor: pointer;
       transition: 0.3s;
-      font-family: 'Itim', cursive;
       font-weight: bold;
       min-width: 150px;
     }
@@ -208,9 +263,43 @@
         width: 100%;
       }
     }
+.home-button {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: #FF69B4; /* สีเดียวกับ header */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .home-button:hover {
+      background-color: #FF1493;
+      transform: scale(1.05);
+    }
+
+    .home-button img {
+      width: 30px;
+      height: 30px;
+      filter: invert(100%); /* ทำให้ไอคอนเป็นสีขาว */
+    }
   </style>
+    <link rel="stylesheet" href="sarabun_font.css">
 </head>
 <body>
+  <a href="register.html" class="home-button">
+    <img src="home_icon.png" alt="หน้าหลัก">
+  </a>
+  <!-- Balloon Container -->
+  <div class="balloon-container" id="balloonContainer"></div>
+
   <div class="container">
     <div class="header">
       <h1>🎈 ยินดีต้อนรับสู่ชั้นอนุบาล 1-3</h1>
@@ -313,6 +402,8 @@
           <div class="activity-icon">🤝</div>
           <h4>ทักษะชีวิต</h4>
           <p>เรียนรู้ความเป็นมิตร ความสำคัญของความร่วมมือ แล้วการแก้ปัญหา</p>
+
+          
         </a>
       </div>
     </div>
@@ -332,8 +423,66 @@
     }
   }
 
+  // --- Balloon Animation Script ---
+  function createBalloon(isLeft) {
+      const container = document.getElementById('balloonContainer');
+      const balloon = document.createElement('div');
+      balloon.className = 'balloon';
+
+      // สุ่มสีลูกโป่ง
+      const colors = ['#ff69b4', '#40e0d0', '#ffd700', '#ff8c00']; // ชมพู, ฟ้า, เหลือง, ส้ม
+      const randomColor = colors[Math.floor(Math.random() * colors.length)];
+      balloon.style.background = `radial-gradient(circle at 30% 30%, #ffffff, ${randomColor})`;
+
+      // สุ่มขนาด
+      const size = Math.random() * 30 + 50; // 50px to 80px
+      balloon.style.width = `${size}px`;
+      balloon.style.height = `${size * 1.3}px`; // ทรงรี
+
+      // สุ่มตำแหน่งเริ่มต้น (ซ้ายหรือขวา)
+      const startPosition = Math.random() * 10; // 0% to 10%
+      if (isLeft) {
+          balloon.style.left = `${startPosition}%`;
+      } else {
+          balloon.style.right = `${startPosition}%`;
+      }
+
+      // สุ่มความเร็ว (ระยะเวลา animation)
+      const duration = Math.random() * 10 + 15; // 15s to 25s
+      balloon.style.animationDuration = `${duration}s`;
+
+      // สุ่มการแกว่ง (drift)
+      const drift = Math.random() * 100 - 50; // -50px to 50px
+      balloon.style.setProperty('--drift', `${drift}px`);
+
+      container.appendChild(balloon);
+
+      // ลบลูกโป่งเมื่อ animation จบ
+      balloon.addEventListener('animationend', () => {
+          balloon.remove();
+      });
+  }
+
+  function startBalloonAnimation() {
+      // สร้างลูกโป่งใหม่ทุกๆ 1-3 วินาที
+      setInterval(() => {
+          // สุ่มสร้างลูกโป่งด้านซ้าย
+          if (Math.random() > 0.5) {
+              createBalloon(true);
+          }
+          // สุ่มสร้างลูกโป่งด้านขวา
+          if (Math.random() > 0.5) {
+              createBalloon(false);
+          }
+      }, Math.random() * 2000 + 1000); // 1000ms to 3000ms
+  }
+  // --- End Balloon Animation Script ---
+
   // เรียกฟังก์ชันเมื่อหน้าโหลดเสร็จ
-  window.addEventListener("load", loadStudentData);
+  window.addEventListener("load", () => {
+    loadStudentData();
+    startBalloonAnimation();
+  });
   </script>
 </body>
 </html>

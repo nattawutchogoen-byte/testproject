@@ -1,0 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap');
+
+/* ใช้ !important เพื่อให้แน่ใจว่าฟอนต์ถูกนำไปใช้กับทุกองค์ประกอบ */
+body, * {
+    font-family: 'Sarabun', sans-serif !important;
+}

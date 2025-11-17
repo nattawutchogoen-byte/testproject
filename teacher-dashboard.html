@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>แดชบอร์ดครู</title>
-  <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -13,7 +12,6 @@
     }
 
     body {
-      font-family: 'Itim', cursive;
       background: linear-gradient(180deg, #E3F2FD, #BBDEFB);
       min-height: 100vh;
       padding: 20px;
@@ -53,7 +51,6 @@
       font-size: 0.95rem;
       cursor: pointer;
       transition: 0.3s;
-      font-family: 'Itim', cursive;
       margin-top: 10px;
     }
 
@@ -155,7 +152,6 @@
       padding: 10px 15px;
       border: 2px solid #90CAF9;
       border-radius: 20px;
-      font-family: 'Itim', cursive;
       font-size: 0.95rem;
       cursor: pointer;
     }
@@ -180,6 +176,7 @@
       }
     }
   </style>
+    <link rel="stylesheet" href="sarabun_font.css">
 </head>
 <body>
   <div class="header">
@@ -243,7 +240,7 @@
   </div>
 
   <script>
-  // ตรวจสอบว่าครูเข้าสู่ระบบแล้วหรือไม่
+ 
   function checkLogin() {
     const isLoggedIn = localStorage.getItem("teacherLoggedIn");
     const teacherName = localStorage.getItem("teacherName");
@@ -256,7 +253,6 @@
     document.getElementById("teacherName").textContent = teacherName || "ครู";
   }
 
-  // โหลดข้อมูลนักเรียน
   function loadRegistrationData() {
     const logs = JSON.parse(localStorage.getItem("userLogs") || "[]");
     const tableBody = document.getElementById("tableBody");
@@ -264,7 +260,7 @@
     const kindergartenCount = document.getElementById("kindergartenCount");
     const primaryCount = document.getElementById("primaryCount");
 
-    // นับจำนวน
+
     let kg = 0, pr = 0;
     logs.forEach(log => {
       if (log.level === "อนุบาล") kg++;
@@ -275,7 +271,7 @@
     kindergartenCount.textContent = kg;
     primaryCount.textContent = pr;
 
-    // แสดงตาราง
+
     if (logs.length === 0) {
       tableBody.innerHTML = `
         <tr>
@@ -299,7 +295,7 @@
     `).join("");
   }
 
-  // ฟังก์ชันกรองข้อมูล
+ 
   function filterTable() {
     const filterLevel = document.getElementById("filterLevel").value;
     const logs = JSON.parse(localStorage.getItem("userLogs") || "[]");
@@ -333,7 +329,7 @@
     `).join("");
   }
 
-  // ฟังก์ชันออกจากระบบ
+
   function logout() {
     if (confirm("คุณแน่ใจหรือว่าต้องการออกจากระบบ?")) {
       localStorage.removeItem("teacherLoggedIn");
@@ -342,7 +338,7 @@
     }
   }
 
-  // เรียกฟังก์ชันเมื่อหน้าโหลดเสร็จ
+
   window.addEventListener("load", () => {
     checkLogin();
     loadRegistrationData();

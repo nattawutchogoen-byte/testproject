@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>หน้าประถมศึกษาปีที่ 5</title>
-  <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -13,7 +12,6 @@
     }
 
     body {
-      font-family: 'Itim', cursive;
       /* Primary School Color Scheme: Blue/Green */
       background: linear-gradient(135deg, #B0E0E6, #ADD8E6, #90EE90);
       min-height: 100vh;
@@ -163,9 +161,40 @@
         grid-template-columns: 1fr;
       }
     }
+.home-button {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: #4682B4; /* สีเดียวกับ header */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .home-button:hover {
+      background-color: #3CB371; /* สีเขียว */
+      transform: scale(1.05);
+    }
+
+    .home-button img {
+      width: 30px;
+      height: 30px;
+      filter: invert(100%); /* ทำให้ไอคอนเป็นสีขาว */
+    }
   </style>
+    <link rel="stylesheet" href="sarabun_font.css">
 </head>
 <body>
+  <a href="register.html" class="home-button">
+    <img src="home_icon.png" alt="หน้าหลัก">
+  </a>
   <div class="container">
     <div class="header">
       <h1>📚 ยินดีต้อนรับสู่ชั้นประถมศึกษาปีที่ 5</h1>

@@ -5,7 +5,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>แบบฝึกหัดสุขศึกษา อนุบาล</title>
-  <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -14,8 +13,7 @@
     }
 
     body {
-      font-family: 'Itim', cursive;
-      background: linear-gradient(135deg, #F0F8FF, #E6E6FA); /* Light, neutral background */
+      background: linear-gradient(135deg, #F0F8FF, #E6E6FA);
       min-height: 100vh;
       padding: 20px;
     }
@@ -30,7 +28,6 @@
     }
 
     .header {
-      /* Kindergarten color scheme */
       background: linear-gradient(135deg, #FF69B4, #FF1493);
       color: white;
       padding: 20px;
@@ -54,7 +51,7 @@
     }
 
     .question-card {
-      background: #FFF0F5; /* Light pink for kindergarten theme */
+      background: #FFF0F5;
       padding: 20px;
       border-radius: 10px;
       margin-bottom: 15px;
@@ -99,48 +96,254 @@
       background-color: #FF1493;
     }
 
-    
+    .result-section {
+      display: none;
+    }
+
+    .result-section.active {
+      display: block;
+    }
+
+    .score-card {
+      background: linear-gradient(135deg, #FFD700, #FFA500);
+      color: white;
+      padding: 30px;
+      border-radius: 15px;
+      text-align: center;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    .score-card h2 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+
+    .score-card p {
+      font-size: 1.3rem;
+    }
+
+    .answer-card {
+      background: #FFF0F5;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .answer-card.correct {
+      border-left: 5px solid #28a745;
+      background: #d4edda;
+    }
+
+    .answer-card.incorrect {
+      border-left: 5px solid #dc3545;
+      background: #f8d7da;
+    }
+
+    .answer-card h4 {
+      color: #FF1493;
+      margin-bottom: 10px;
+      font-size: 1.2rem;
+    }
+
+    .answer-info {
+      margin-top: 10px;
+      padding: 10px;
+      background: white;
+      border-radius: 5px;
+    }
+
+    .answer-info p {
+      margin: 5px 0;
+      font-size: 1rem;
+    }
+
+    .correct-answer {
+      color: #28a745;
+      font-weight: bold;
+    }
+
+    .wrong-answer {
+      color: #dc3545;
+      font-weight: bold;
+    }
+
+    .explanation {
+      margin-top: 10px;
+      padding: 10px;
+      border-top: 1px solid #ccc;
+      font-style: italic;
+      color: #333;
+    }
+
+    .back-btn {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      background-color: #6c757d;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin-top: 20px;
+      text-decoration: none;
+      text-align: center;
+    }
+
+    .back-btn:hover {
+      background-color: #5a6268;
+    }
   </style>
+    <link rel="stylesheet" href="sarabun_font.css">
 </head>
 <body>
   <div class="container">
     <div class="header">
-      <h1>แบบฝึกหัดสุขศึกษา</h1>
+      <h1>แบบฝึกหัดสุขศึกษา อนุบาล</h1>
       <p>ชั้นอนุบาล - จำนวน 10 ข้อ</p>
     </div>
 
-    <form id="quizForm">
-      <!-- Questions will be rendered here by JavaScript -->
-      <button type="submit" class="submit-btn">ส่งคำตอบ</button>
-    </form>
+    <div id="quizSection" class="quiz-section">
+      <form id="quizForm">
+        <button type="submit" class="submit-btn" id="submitBtn" disabled>ส่งคำตอบ</button>
+      </form>
+    </div>
 
-    
+    <div id="resultSection" class="result-section">
+      <div class="score-card">
+        <h2>คะแนนของคุณ</h2>
+        <p id="scoreText">0/10</p>
+      </div>
+      <div id="answersContainer"></div>
+      <a href="kid1-3.html" class="back-btn">กลับหน้าหลัก</a>
+    </div>
   </div>
 
-  
-  
-  
   <script>
     const QUIZ_DATA = [
-        {"q": "เราควรแปรงฟันวันละกี่ครั้ง?", "options": ["1 ครั้ง", "2 ครั้ง", "3 ครั้ง", "4 ครั้ง"], "answer": "2 ครั้ง"},
-        {"q": "อาหารชนิดใดที่ทำให้ร่างกายแข็งแรง?", "options": ["ขนมหวาน", "ผักและผลไม้", "น้ำอัดลม", "ลูกอม"], "answer": "ผักและผลไม้"},
-        {"q": "เราควรล้างมือก่อนทำอะไร?", "options": ["ดูทีวี", "กินอาหาร", "นอนหลับ", "วิ่งเล่น"], "answer": "กินอาหาร"},
-        {"q": "เราควรนอนหลับวันละกี่ชั่วโมง?", "options": ["1-2 ชั่วโมง", "4-5 ชั่วโมง", "8-10 ชั่วโมง", "12 ชั่วโมง"], "answer": "8-10 ชั่วโมง"},
-        {"q": "เมื่อเราป่วยควรไปหาใคร?", "options": ["ตำรวจ", "คุณครู", "คุณหมอ", "คนขับรถ"], "answer": "คุณหมอ"},
-        {"q": "เราควรทำอย่างไรกับเล็บมือที่ยาว?", "options": ["ปล่อยไว้", "กัด", "ตัดให้สั้น", "ทาสี"], "answer": "ตัดให้สั้น"},
-        {"q": "การออกกำลังกายช่วยให้ร่างกายเป็นอย่างไร?", "options": ["อ่อนแอ", "แข็งแรง", "ป่วยง่าย", "เหนื่อย"], "answer": "แข็งแรง"},
-        {"q": "เราควรอาบน้ำวันละกี่ครั้ง?", "options": ["1 ครั้ง", "2 ครั้ง", "3 ครั้ง", "4 ครั้ง"], "answer": "2 ครั้ง"},
-        {"q": "เมื่อไอหรือจามควรใช้สิ่งใดปิดปาก?", "options": ["มือ", "แขนเสื้อ", "ผ้าเช็ดหน้า", "ถูกทุกข้อ"], "answer": "ถูกทุกข้อ"},
-        {"q": "การรับประทานอาหารเช้ามีความสำคัญอย่างไร?", "options": ["ไม่สำคัญ", "ทำให้ง่วง", "ทำให้มีพลังงาน", "ทำให้หิว"], "answer": "ทำให้มีพลังงาน"}
-    ];
+    {
+        "q": "เราควรแปรงฟันวันละกี่ครั้ง?",
+        "options": [
+            "1 ครั้ง",
+            "2 ครั้ง",
+            "3 ครั้ง",
+            "4 ครั้ง"
+        ],
+        "answer": "2 ครั้ง",
+        "explanation": "คำตอบที่ถูกต้องคือ '2 ครั้ง'"
+    },
+    {
+        "q": "อาหารชนิดใดที่ทำให้ร่างกายแข็งแรง?",
+        "options": [
+            "ขนมหวาน",
+            "ผักและผลไม้",
+            "น้ำอัดลม",
+            "ลูกอม"
+        ],
+        "answer": "ผักและผลไม้",
+        "explanation": "คำตอบที่ถูกต้องคือ 'ผักและผลไม้' ซึ่งเป็นความรู้พื้นฐานเกี่ยวกับสุขภาพและความสะอาด"
+    },
+    {
+        "q": "เราควรล้างมือก่อนทำอะไร?",
+        "options": [
+            "ดูทีวี",
+            "กินอาหาร",
+            "นอนหลับ",
+            "วิ่งเล่น"
+        ],
+        "answer": "กินอาหาร",
+        "explanation": "คำตอบที่ถูกต้องคือ 'กินอาหาร'"
+    },
+    {
+        "q": "เราควรนอนหลับวันละกี่ชั่วโมง?",
+        "options": [
+            "1-2 ชั่วโมง",
+            "4-5 ชั่วโมง",
+            "8-10 ชั่วโมง",
+            "12 ชั่วโมง"
+        ],
+        "answer": "8-10 ชั่วโมง",
+        "explanation": "คำตอบที่ถูกต้องคือ '8-10 ชั่วโมง'"
+    },
+    {
+        "q": "เมื่อเราป่วยควรไปหาใคร?",
+        "options": [
+            "ตำรวจ",
+            "คุณครู",
+            "คุณหมอ",
+            "คนขับรถ"
+        ],
+        "answer": "คุณหมอ",
+        "explanation": "คำตอบที่ถูกต้องคือ 'คุณหมอ'"
+    },
+    {
+        "q": "เราควรทำอย่างไรกับเล็บมือที่ยาว?",
+        "options": [
+            "ปล่อยไว้",
+            "กัด",
+            "ตัดให้สั้น",
+            "ทาสี"
+        ],
+        "answer": "ตัดให้สั้น",
+        "explanation": "คำตอบที่ถูกต้องคือ 'ตัดให้สั้น'"
+    },
+    {
+        "q": "การออกกำลังกายช่วยให้ร่างกายเป็นอย่างไร?",
+        "options": [
+            "อ่อนแอ",
+            "แข็งแรง",
+            "ป่วยง่าย",
+            "เหนื่อย"
+        ],
+        "answer": "แข็งแรง",
+        "explanation": "คำตอบที่ถูกต้องคือ 'แข็งแรง' ซึ่งเป็นกิจกรรมหรืออุปกรณ์ที่ใช้ในการออกกำลังกายและพลศึกษา"
+    },
+    {
+        "q": "เราควรอาบน้ำวันละกี่ครั้ง?",
+        "options": [
+            "1 ครั้ง",
+            "2 ครั้ง",
+            "3 ครั้ง",
+            "4 ครั้ง"
+        ],
+        "answer": "2 ครั้ง",
+        "explanation": "คำตอบที่ถูกต้องคือ '2 ครั้ง'"
+    },
+    {
+        "q": "เมื่อไอหรือจามควรใช้สิ่งใดปิดปาก?",
+        "options": [
+            "มือ",
+            "แขนเสื้อ",
+            "ผ้าเช็ดหน้า",
+            "ถูกทุกข้อ"
+        ],
+        "answer": "ถูกทุกข้อ",
+        "explanation": "คำตอบที่ถูกต้องคือ 'ถูกทุกข้อ'"
+    },
+    {
+        "q": "การรับประทานอาหารเช้ามีความสำคัญอย่างไร?",
+        "options": [
+            "ไม่สำคัญ",
+            "ทำให้ง่วง",
+            "ทำให้มีพลังงาน",
+            "ทำให้หิว"
+        ],
+        "answer": "ทำให้มีพลังงาน",
+        "explanation": "คำตอบที่ถูกต้องคือ 'ทำให้มีพลังงาน' ซึ่งเป็นความรู้พื้นฐานเกี่ยวกับสุขภาพและความสะอาด"
+    }
+];
+
+    let userAnswers = {};
 
     document.addEventListener('DOMContentLoaded', () => {
       const quizForm = document.getElementById('quizForm');
-      const submitBtn = quizForm.querySelector('.submit-btn');
+      const submitBtn = document.getElementById("submitBtn");
       const questionsContainer = document.createElement('div');
       quizForm.insertBefore(questionsContainer, submitBtn);
 
-            // Function to render the quiz questions
       function renderQuiz() {
         let html = '';
         QUIZ_DATA.forEach((qData, index) => {
@@ -163,32 +366,68 @@
         });
         
         questionsContainer.innerHTML = html;
+        questionsContainer.addEventListener('change', checkCompletion);
       }
 
-      // Function to check answers and show inline feedback
+      function checkCompletion() {
+        const answeredCount = document.querySelectorAll('input[type="radio"]:checked').length;
+        submitBtn.disabled = answeredCount !== QUIZ_DATA.length;
+      }
+
       function checkAnswers(e) {
         e.preventDefault();
         let score = 0;
+        userAnswers = {};
         
         QUIZ_DATA.forEach((qData, index) => {
           const qNum = index + 1;
           const selectedOption = document.querySelector(`input[name="q${qNum}"]:checked`);
+          const userAnswer = selectedOption ? selectedOption.value : null;
+          userAnswers[qNum] = userAnswer;
           
-          if (selectedOption && selectedOption.value === qData.answer) {
+          if (userAnswer === qData.answer) {
             score++;
           }
         });
 
-        // Save score to Local Storage
-        localStorage.setItem('quizScore', score);
-
-        // Redirect to result page
-        window.location.href = 'result.html';
+        showResults(score);
       }
 
-      // Initial render and event listener setup
+      function showResults(score) {
+        document.getElementById('quizSection').style.display = 'none';
+        document.getElementById('resultSection').classList.add('active');
+        document.getElementById('scoreText').textContent = `${score}/${QUIZ_DATA.length}`;
+
+        const answersContainer = document.getElementById('answersContainer');
+        let html = '';
+
+        QUIZ_DATA.forEach((qData, index) => {
+          const qNum = index + 1;
+          const userAnswer = userAnswers[qNum];
+          const isCorrect = userAnswer === qData.answer;
+          const cardClass = isCorrect ? 'correct' : 'incorrect';
+
+          html += `
+            <div class="answer-card ${cardClass}">
+              <h4>ข้อ ${qNum}: ${qData.q}</h4>
+              <div class="answer-info">
+                ${userAnswer ? `<p>คำตอบของคุณ: <span class="${isCorrect ? 'correct-answer' : 'wrong-answer'}">${userAnswer}</span></p>` : '<p>คุณไม่ได้ตอบข้อนี้</p>'}
+                ${!isCorrect ? `<p>เฉลย: <span class="correct-answer">${qData.answer}</span></p>` : '<p>✓ ถูกต้อง!</p>'}
+              </div>
+              <div class="explanation">
+                คำอธิบาย: ${qData.explanation}
+              </div>
+            </div>
+          `;
+        });
+
+        answersContainer.innerHTML = html;
+      }
+
       renderQuiz();
+      checkCompletion(); // Initial check to disable the button
       quizForm.addEventListener('submit', checkAnswers);
     });
-  </script></body>
+  </script>
+</body>
 </html>
