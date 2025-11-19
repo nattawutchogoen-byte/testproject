@@ -197,7 +197,7 @@
       background-color: #5a6268;
     }
   </style>
-    <link rel="stylesheet" href="sarabun_font.css">
+    <link rel="stylesheet" href="Amiko.css">
 </head>
 <body>
   <div class="container">
@@ -222,7 +222,7 @@
     </div>
   </div>
 
-  <script>
+ <script>
     const QUIZ_DATA = [
     {
         "q": "การพับกระดาษเป็นการสร้างสรรค์อะไร?",
@@ -336,6 +336,27 @@
     }
 ];
 
+    // --- ⬇️ เพิ่มฟังก์ชันสลับอาร์เรย์ (Fisher-Yates Shuffle) ⬇️ ---
+    function shuffleArray(array) {
+      let currentIndex = array.length,  randomIndex;
+
+      // ในขณะที่ยังมีองค์ประกอบเหลือให้สลับ
+      while (currentIndex != 0) {
+
+        // เลือกองค์ประกอบที่เหลือแบบสุ่ม
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+
+        // และสลับกับองค์ประกอบปัจจุบัน
+        [array[currentIndex], array[randomIndex]] = [
+          array[randomIndex], array[currentIndex]];
+      }
+
+      return array;
+    }
+    // --- ⬆️ สิ้นสุดฟังก์ชันสลับอาร์เรย์ ⬆️ ---
+
+
     let userAnswers = {};
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -380,10 +401,14 @@
         userAnswers = {};
         
         QUIZ_DATA.forEach((qData, index) => {
-          const qNum = index + 1;
+          // *** แก้ไขเล็กน้อย: ใช้ qData.q เป็น key แทน index เพื่อให้ตรงกับคำถามที่สลับไป ***
+          const qNum = index + 1; // ยังคงใช้ qNum สำหรับการตั้งชื่อ input name
           const selectedOption = document.querySelector(`input[name="q${qNum}"]:checked`);
           const userAnswer = selectedOption ? selectedOption.value : null;
-          userAnswers[qNum] = userAnswer;
+          
+          // เก็บคำตอบโดยใช้คำถาม (qData.q) เป็นตัวอ้างอิง แทนที่จะใช้เลขข้อ (qNum)
+          // เพราะลำดับ qNum ในการ render จะเปลี่ยนไป แต่ qData.q จะคงเดิม
+          userAnswers[qData.q] = userAnswer; 
           
           if (userAnswer === qData.answer) {
             score++;
@@ -403,7 +428,8 @@
 
         QUIZ_DATA.forEach((qData, index) => {
           const qNum = index + 1;
-          const userAnswer = userAnswers[qNum];
+          // *** ดึงคำตอบที่ผู้ใช้ตอบโดยใช้ qData.q เป็น key ***
+          const userAnswer = userAnswers[qData.q];
           const isCorrect = userAnswer === qData.answer;
           const cardClass = isCorrect ? 'correct' : 'incorrect';
 
@@ -423,6 +449,10 @@
 
         answersContainer.innerHTML = html;
       }
+
+      // --- ⬇️ เรียกใช้ฟังก์ชันสลับอาร์เรย์ก่อนแสดงผล ⬇️ ---
+      shuffleArray(QUIZ_DATA);
+      // --- ⬆️ ------------------------------------ ⬆️ ---
 
       renderQuiz();
       checkCompletion(); // Initial check to disable the button
